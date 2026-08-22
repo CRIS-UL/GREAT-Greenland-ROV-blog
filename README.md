@@ -39,11 +39,28 @@ images/               Gallery images
 
 ## How the map works
 
-Each survey location shows as a **single marker** on a zoomed-out ocean map.
-Click a marker to reveal that dive's **track** — the individual fixes we
-travelled, each with its depth — and the map zooms to it. An **“All locations”**
-button returns to the overview. The basemap upscales its last available tiles
-past zoom 13, so the map is never blank when you zoom in.
+Each **dive** shows as a **single marker** on a zoomed-out ocean map, coloured
+by the feature it surveyed — the **volcano** (the Caldera), the **seamount**,
+and two glacier-carved **valleys**. Click a marker to reveal that dive's
+**track** — the individual fixes travelled, each with its depth — and the map
+zooms to it. An **“All locations”** button returns to the overview. The basemap
+upscales its last available tiles past zoom 13, so the map is never blank when
+you zoom in.
+
+### Surveyed dives (in `js/survey-data.js`)
+
+| Feature | Dive | Fixes |
+|---|---|---|
+| Volcano (Caldera) | Sides Ring | 6 |
+| Volcano (Caldera) | First Dive | 4 |
+| Volcano (Caldera) | Second Dive | 1 (rest cut off in notes) |
+| Seamount | Western Transect | 5 |
+| Glacial valley | Slope Dive | 8 |
+| Glacial valley | Canyon Dive | 4 |
+
+A few fixes were partly obscured in the field notes (Caldera Second Dive fixes,
+the ROV 1 6th fix, and the Canyon “End” fix) — these are flagged in comments in
+`js/survey-data.js` to be filled in once confirmed.
 
 ## How to update it
 

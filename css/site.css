@@ -166,8 +166,10 @@ p.lead { font-size: 18px; }
   padding: 8px 10px;
   margin-bottom: 12px;
 }
-.legend-line { display: flex; align-items: center; gap: 8px; font-size: 14px; margin: 6px 0; font-weight: bold; color: var(--heading); }
-.legend-line .swatch { width: 14px; height: 14px; border-radius: 4px; }
+.legend-line { display: flex; align-items: flex-start; gap: 8px; font-size: 14px; margin: 8px 0; font-weight: bold; color: var(--heading); }
+.legend-line .swatch { width: 14px; height: 14px; border-radius: 4px; margin-top: 3px; flex: 0 0 auto; }
+.legend-text { display: flex; flex-direction: column; line-height: 1.25; }
+.legend-sub { font-weight: normal; color: var(--muted); font-size: 12px; }
 .pt-list { list-style: none; margin: 8px 0 4px; padding: 0; }
 .pt-list li {
   font-size: 13px; color: var(--text);

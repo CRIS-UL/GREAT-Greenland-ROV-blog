@@ -27,6 +27,30 @@ function centroid(points) {
   ];
 }
 
+// Group dives whose centroids are within `thresh` degrees and return a
+// Map of line.id -> index within its cluster (for label stacking).
+function assignStacks(entries, thresh = 0.005) {
+  const idx = new Map();
+  const used = new Array(entries.length).fill(false);
+  for (let i = 0; i < entries.length; i++) {
+    if (used[i]) continue;
+    const group = [i];
+    used[i] = true;
+    for (let j = i + 1; j < entries.length; j++) {
+      if (used[j]) continue;
+      if (
+        Math.abs(entries[i].c[0] - entries[j].c[0]) < thresh &&
+        Math.abs(entries[i].c[1] - entries[j].c[1]) < thresh
+      ) {
+        group.push(j);
+        used[j] = true;
+      }
+    }
+    group.forEach((gi, k) => idx.set(entries[gi].line.id, k));
+  }
+  return idx;
+}
+
 function initMap() {
   if (typeof L === "undefined") {
     const el = document.getElementById("map");
@@ -82,22 +106,31 @@ function showOverview(initial = false) {
   const lines = linesWithPoints();
   const centers = [];
 
-  lines.forEach((line) => {
-    const c = centroid(line.points);
+  // Compute centroids, then stack the labels of co-located dives vertically
+  // so none hides another (e.g. the two Caldera dives sit almost on top of
+  // each other). Markers still point at each dive's true centroid.
+  const entries = lines.map((line) => ({ line, c: centroid(line.points) }));
+  const stack = assignStacks(entries);
+
+  entries.forEach(({ line, c }) => {
     centers.push(c);
+    const idx = stack.get(line.id) || 0;
 
     const icon = L.divIcon({
-      className: "",
+      className: "loc-pin-wrap",
       html:
         `<div class="loc-pin" style="background:${line.color}">` +
-        `📍 ${line.name} · ${line.points.length} fixes</div>`,
+        `📍 ${line.name} · ${fixes(line.points.length)}</div>`,
       iconSize: null,
-      iconAnchor: [0, 0]
+      iconAnchor: [-12, 10 + idx * 30]
     });
 
     const marker = L.marker(c, { icon }).addTo(map);
     marker.on("click", () => expandLine(line));
-    marker.bindTooltip("Click to view the dive track", { direction: "top" });
+    marker.bindTooltip(
+      `${line.feature || "Dive"} — click to view the ${line.points.length}-fix track`,
+      { direction: "top" }
+    );
     overviewMarkers.push(marker);
   });
 
@@ -145,10 +178,11 @@ function expandLine(line) {
     })
       .addTo(map)
       .bindPopup(
-        `<b>${line.name} · ${p.label || "fix " + (i + 1)}</b><br>` +
-          `Lat ${p.lat.toFixed(6)}<br>` +
-          `Lon ${p.lon.toFixed(6)}<br>` +
-          (p.depth ? `Depth <b>${p.depth} m</b>` : "")
+        `<b>${line.name}</b><br>` +
+          `<span style="color:#6a7178">${line.feature || "Dive"} · ${p.label || "fix " + (i + 1)}</span><br>` +
+          `Lat ${p.lat.toFixed(5)}<br>` +
+          `Lon ${p.lon.toFixed(5)}<br>` +
+          (p.depth ? `Depth <b>${p.depth} m</b>` : "<i>depth not recorded</i>")
       );
     detailLayers.push(marker);
   });
@@ -199,7 +233,8 @@ function buildSidePanel() {
   legend.innerHTML = SURVEY_LINES.map(
     (l) =>
       `<div class="legend-line"><span class="swatch" style="background:${l.color}"></span>` +
-      `${l.name} <span style="color:var(--muted);font-weight:normal">· ${l.points.length} fixes</span></div>`
+      `<span class="legend-text">${l.name}` +
+      `<span class="legend-sub">${l.feature || ""} · ${fixes(l.points.length)}</span></span></div>`
   ).join("");
 
   const depths = allPoints.map((p) => p.depth).filter(Boolean);
@@ -227,6 +262,10 @@ function buildSidePanel() {
 
 function avg(arr) {
   return arr.reduce((a, b) => a + b, 0) / arr.length;
+}
+
+function fixes(n) {
+  return n + (n === 1 ? " fix" : " fixes");
 }
 
 /* ---------------------------------------------------------------------------
