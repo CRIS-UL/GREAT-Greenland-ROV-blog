@@ -39,9 +39,10 @@ images/               Gallery images
 
 ## How the map works
 
-The interactive map is **locked to the Greenland–Iceland region** (`REGION_FIT`
-/ `REGION_MAX_BOUNDS` in `js/site.js`) so the sites sit in context and you can't
-pan or zoom out to the rest of the world.
+The interactive map opens framed on the **Greenland–Iceland** area
+(`REGION_FIT` in `js/site.js`) and is bounded (`REGION_MAX_BOUNDS`) so you can
+pan **east and south to the top of Europe** (British Isles, Scandinavia) but
+can't roam out to the rest of the world.
 
 Each **dive** shows as a **single marker**, coloured by the feature it surveyed
 — the **volcano** (the Caldera), the **seamount**, and two glacier-carved
@@ -65,20 +66,21 @@ The fixes are fitted to the image frame (relative geometry preserved,
 north-up); they are not georeferenced to the image, since the renders aren't
 geotagged.
 
-### Surveyed dives (in `js/survey-data.js`)
+### Surveyed sites (in `js/survey-data.js`)
 
-| Feature | Dive | Fixes |
+| Site (marker) | Feature | Fixes |
 |---|---|---|
-| Volcano (Caldera) | Sides Ring | 6 |
-| Volcano (Caldera) | First Dive | 4 |
-| Volcano (Caldera) | Second Dive | 1 (rest cut off in notes) |
-| Seamount | Western Transect | 5 |
-| Glacial valley | Slope Dive | 8 |
-| Glacial valley | Canyon Dive | 4 |
+| **Caldera** (Sides Ring + First Dive + Second Dive as segments) | Volcano | 11 |
+| Seamount — Western Transect | Seamount | 5 |
+| Glacial Valley — Slope Dive | Glacial valley | 8 |
+| Glacial Valley — Canyon Dive | Glacial valley | 4 |
+
+The three Caldera dives are merged into one site: each is a `segment` so its
+track draws separately under a single Caldera marker.
 
 A few fixes were partly obscured in the field notes (Caldera Second Dive fixes,
-the ROV 1 6th fix, and the Canyon “End” fix) — these are flagged in comments in
-`js/survey-data.js` to be filled in once confirmed.
+the seamount 6th fix, and the Canyon “End” fix) — these are flagged in comments
+in `js/survey-data.js` to be filled in once confirmed.
 
 ## How to update it
 

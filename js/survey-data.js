@@ -12,54 +12,56 @@
 // `feature` labels what the dive was surveying:
 //   "Volcano" (the Caldera), "Seamount" (the mount), "Glacial valley".
 //
-// TO ADD / EDIT: add a point to a dive's `points`, or add a new dive object.
-// The map, legend, stats and fix list all update automatically.
+// A site normally has a `points` array (one track). A site can instead have
+// `segments` (an array of { label, points }) to hold several dives under one
+// marker — each segment's track is drawn separately. The Caldera uses this.
+//
+// TO ADD / EDIT: add a point to a `points` array, add a segment, or add a new
+// site object. The map, legend, stats and fix list all update automatically.
 // ---------------------------------------------------------------------------
 
 export const SURVEY_LINES = [
   // ===================== VOLCANO — the Caldera (~71.02°N / 13.17°W) =========
+  // All three caldera dives are merged into one site. Each dive is a
+  // `segment` so its track is drawn separately (no line joining the dives).
   {
-    id: "caldera-ring",
+    id: "caldera",
     bg: "images/sites/caldera.jpg",
-    name: "Caldera — Sides Ring",
+    name: "Caldera",
     feature: "Volcano",
     color: "#e8542f",
-    description: "Ring of fixes around the caldera rim of the underwater volcano.",
-    points: [
-      { lat: 71.02244, lon: -13.16976, depth: 457.8, label: "1" },
-      { lat: 71.02209, lon: -13.17533, depth: 443.4, label: "2" },
-      { lat: 71.02124, lon: -13.17640, depth: 449.2, label: "3" },
-      { lat: 71.01970, lon: -13.16881, depth: 450.5, label: "4" },
-      { lat: 71.02235, lon: -13.17245, depth: 440.1, label: "5" },
-      { lat: 71.02008, lon: -13.16712, depth: 483.4, label: "6" }
-    ]
-  },
-  {
-    id: "caldera-first",
-    bg: "images/sites/caldera.jpg",
-    name: "Caldera — First Dive",
-    feature: "Volcano",
-    color: "#f39c12",
-    description: "First dive on the caldera, deep start climbing up the flank.",
-    points: [
-      { lat: 71.02202, lon: -13.16568, depth: 564.0, label: "Start" },
-      { lat: 71.02106, lon: -13.17042, depth: 500.3, label: "Mid" },
-      { lat: 71.02009, lon: -13.17508, depth: 450.0, label: "Top" },
-      { lat: 71.01955, lon: -13.17153, depth: 441.9, label: "Top 2" }
-    ]
-  },
-  {
-    id: "caldera-second",
-    bg: "images/sites/caldera.jpg",
-    name: "Caldera — Second Dive",
-    feature: "Volcano",
-    color: "#c0392b",
     description:
-      "Second caldera dive, ~1.8 km north of the ring. Only the first fix was " +
-      "legible in the field sheet — add the rest here once digitised.",
-    points: [
-      { lat: 71.03997, lon: -13.16065, depth: 464.9, label: "Mid bot" }
-      // Remaining Second-dive fixes were cut off in the notes — add them here.
+      "The underwater volcano. Combines the sides-ring survey and the two " +
+      "caldera dives.",
+    segments: [
+      {
+        label: "Sides Ring",
+        points: [
+          { lat: 71.02244, lon: -13.16976, depth: 457.8, label: "R1" },
+          { lat: 71.02209, lon: -13.17533, depth: 443.4, label: "R2" },
+          { lat: 71.02124, lon: -13.17640, depth: 449.2, label: "R3" },
+          { lat: 71.01970, lon: -13.16881, depth: 450.5, label: "R4" },
+          { lat: 71.02235, lon: -13.17245, depth: 440.1, label: "R5" },
+          { lat: 71.02008, lon: -13.16712, depth: 483.4, label: "R6" }
+        ]
+      },
+      {
+        label: "First Dive",
+        points: [
+          { lat: 71.02202, lon: -13.16568, depth: 564.0, label: "Start" },
+          { lat: 71.02106, lon: -13.17042, depth: 500.3, label: "Mid" },
+          { lat: 71.02009, lon: -13.17508, depth: 450.0, label: "Top" },
+          { lat: 71.01955, lon: -13.17153, depth: 441.9, label: "Top 2" }
+        ]
+      },
+      {
+        label: "Second Dive",
+        // ~1.8 km north of the ring. Only the first fix was legible in the
+        // field sheet — add the rest here once digitised.
+        points: [
+          { lat: 71.03997, lon: -13.16065, depth: 464.9, label: "Mid bot" }
+        ]
+      }
     ]
   },
 

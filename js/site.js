@@ -11,22 +11,34 @@ import { SURVEY_LINES } from "./survey-data.js";
 --------------------------------------------------------------------------- */
 const NATIVE_MAX_ZOOM = 13; // last zoom the ocean basemap has real tiles for
 
-// The window the map is locked to (roughly east Greenland → Iceland → sites).
+// Initial framing (east Greenland → Iceland → sites) …
 const REGION_FIT = [
   [62.0, -40.0],
   [73.8, -7.0]
 ];
+// … and the hard pan limit — extended east and south so you can navigate to
+// the top of Europe (British Isles, Scandinavia) without reaching the rest of
+// the world.
 const REGION_MAX_BOUNDS = [
-  [58.0, -52.0],
-  [77.0, 3.0]
+  [47.0, -58.0],
+  [82.0, 38.0]
 ];
 
 let map;
 let overviewMarkers = [];
 let currentSite = null;
 
+// A site is either { points: [...] } or { segments: [{ label, points }] }.
+function segmentsOf(line) {
+  if (line.segments && line.segments.length) return line.segments;
+  return [{ label: null, points: line.points || [] }];
+}
+function allPointsOf(line) {
+  return segmentsOf(line).flatMap((s) => s.points);
+}
+
 function linesWithPoints() {
-  return SURVEY_LINES.filter((l) => l.points && l.points.length);
+  return SURVEY_LINES.filter((l) => allPointsOf(l).length);
 }
 
 function centroid(points) {
@@ -110,8 +122,9 @@ function initMap() {
   ).addTo(map);
 
   map.fitBounds(REGION_FIT);
-  // Lock zoom-out at the region framing — can't reach the rest of the world.
-  map.setMinZoom(map.getZoom());
+  // Lock zoom-out near the region framing (one extra level for context) so the
+  // map stays over the North Atlantic / Arctic Europe, not the whole world.
+  map.setMinZoom(Math.max(3, map.getZoom() - 1));
 
   buildOverview();
 
@@ -125,7 +138,7 @@ function buildOverview() {
   overviewMarkers = [];
 
   const lines = linesWithPoints();
-  const entries = lines.map((line) => ({ line, c: centroid(line.points) }));
+  const entries = lines.map((line) => ({ line, c: centroid(allPointsOf(line)) }));
   const stack = assignStacks(entries);
 
   entries.forEach(({ line, c }) => {
@@ -134,7 +147,7 @@ function buildOverview() {
       className: "loc-pin-wrap",
       html:
         `<div class="loc-pin" style="background:${line.color}">` +
-        `📍 ${line.name} · ${fixes(line.points.length)}</div>`,
+        `📍 ${line.name} · ${fixes(allPointsOf(line).length)}</div>`,
       iconSize: null,
       iconAnchor: [-12, 10 + idx * 30]
     });
@@ -162,7 +175,7 @@ function openSiteView(line) {
   img.alt = line.name + " bathymetry";
   title.innerHTML =
     `${escapeHtml(line.name)}` +
-    `<span>${escapeHtml(line.feature || "Dive")} · ${fixes(line.points.length)}</span>`;
+    `<span>${escapeHtml(line.feature || "Dive")} · ${fixes(allPointsOf(line).length)}</span>`;
 
   sv.hidden = false;
   // Render after layout so the SVG has its pixel size.
@@ -178,9 +191,10 @@ function closeSiteView() {
   setHint("Tip: click a site marker to open its dive over the bathymetry.");
 }
 
-// Map the dive's fixes into the image area, preserving relative geometry
-// (with a cos(lat) correction) and north-up orientation.
-function layoutPoints(points, W, H, pad) {
+// Build a projector that maps lat/lon into the image area, preserving relative
+// geometry (with a cos(lat) correction) and north-up orientation. All of a
+// site's points share one projector so segments stay in register.
+function makeProjector(points, W, H, pad) {
   const lats = points.map((p) => p.lat);
   const lons = points.map((p) => p.lon);
   const minLat = Math.min(...lats);
@@ -193,15 +207,12 @@ function layoutPoints(points, W, H, pad) {
   const availW = Math.max(W - 2 * pad, 10);
   const availH = Math.max(H - 2 * pad, 10);
   const scale = Math.min(availW / geoW, availH / geoH);
-  const drawW = geoW * scale;
-  const drawH = geoH * scale;
-  const offX = (W - drawW) / 2;
-  const offY = (H - drawH) / 2;
-  return points.map((p) => ({
-    p,
+  const offX = (W - geoW * scale) / 2;
+  const offY = (H - geoH * scale) / 2;
+  return (p) => ({
     x: offX + (p.lon - minLon) * k * scale,
     y: offY + (maxLat - p.lat) * scale
-  }));
+  });
 }
 
 function renderSiteSvg(line, svg) {
@@ -210,32 +221,53 @@ function renderSiteSvg(line, svg) {
   const H = svg.clientHeight || host.clientHeight || 480;
   svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
 
-  const pts = layoutPoints(line.points, W, H, 64);
-  const poly = pts.map((o) => `${o.x.toFixed(1)},${o.y.toFixed(1)}`).join(" ");
+  const segs = segmentsOf(line);
+  const all = segs.flatMap((s) => s.points);
+  const project = makeProjector(all, W, H, 64);
+
+  // Merged sites (several dives) get dense clusters, so keep their on-image
+  // labels short — depth stays on hover and in the side panel. Single-track
+  // sites show depth inline.
+  const showDepthInline = segs.length === 1;
 
   let html = "";
-  if (pts.length > 1) {
+
+  // One polyline per segment (dives are not joined to each other).
+  segs.forEach((seg) => {
+    if (seg.points.length < 2) return;
+    const poly = seg.points
+      .map((p) => {
+        const q = project(p);
+        return `${q.x.toFixed(1)},${q.y.toFixed(1)}`;
+      })
+      .join(" ");
     html +=
       `<polyline points="${poly}" fill="none" stroke="rgba(0,0,0,0.55)" ` +
       `stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>`;
     html +=
       `<polyline points="${poly}" fill="none" stroke="${line.color}" ` +
       `stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>`;
-  }
-  pts.forEach((o, i) => {
-    const p = o.p;
+  });
+
+  // Fix markers + labels for every point.
+  all.forEach((p, i) => {
+    const q = project(p);
     const name = p.label || "fix " + (i + 1);
     const depthTxt = p.depth ? ` · ${p.depth} m` : "";
     html +=
-      `<circle cx="${o.x.toFixed(1)}" cy="${o.y.toFixed(1)}" r="6.5" ` +
+      `<circle cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="6.5" ` +
       `fill="${line.color}" stroke="#fff" stroke-width="2">` +
       `<title>${escapeHtml(name)}${escapeHtml(depthTxt)} — ` +
       `${p.lat.toFixed(5)}, ${p.lon.toFixed(5)}</title></circle>`;
     html +=
-      `<text class="sv-label" x="${(o.x + 11).toFixed(1)}" ` +
-      `y="${(o.y + 4).toFixed(1)}">${escapeHtml(name)}` +
-      `<tspan class="sv-depth">${escapeHtml(depthTxt)}</tspan></text>`;
+      `<text class="sv-label" x="${(q.x + 10).toFixed(1)}" ` +
+      `y="${(q.y + 4).toFixed(1)}">${escapeHtml(name)}` +
+      (showDepthInline
+        ? `<tspan class="sv-depth">${escapeHtml(depthTxt)}</tspan>`
+        : "") +
+      `</text>`;
   });
+
   svg.innerHTML = html;
 }
 
@@ -246,7 +278,7 @@ function setHint(html) {
 
 /* ---------- Side panel (legend, stats, fix list) ---------- */
 function buildSidePanel() {
-  const allPoints = SURVEY_LINES.flatMap((l) => l.points);
+  const allPoints = SURVEY_LINES.flatMap((l) => allPointsOf(l));
 
   const legend = document.getElementById("legend");
   legend.innerHTML = SURVEY_LINES.map(
@@ -254,7 +286,7 @@ function buildSidePanel() {
       `<div class="legend-line" data-id="${l.id}" role="button" tabindex="0" title="Open ${escapeHtml(l.name)}">` +
       `<span class="swatch" style="background:${l.color}"></span>` +
       `<span class="legend-text">${escapeHtml(l.name)}` +
-      `<span class="legend-sub">${escapeHtml(l.feature || "")} · ${fixes(l.points.length)}</span></span></div>`
+      `<span class="legend-sub">${escapeHtml(l.feature || "")} · ${fixes(allPointsOf(l).length)}</span></span></div>`
   ).join("");
   // Let the legend rows open a site too (works even without the map).
   legend.querySelectorAll(".legend-line").forEach((row) => {
@@ -282,10 +314,14 @@ function buildSidePanel() {
 
   const list = document.getElementById("pt-list");
   const rows = SURVEY_LINES.flatMap((l) =>
-    l.points.map(
-      (p) =>
-        `<li><span>${escapeHtml(l.name)} ${escapeHtml(p.label || "")}</span>` +
-        `<span class="d">${p.depth ? p.depth + " m" : ""}</span></li>`
+    segmentsOf(l).flatMap((seg) =>
+      seg.points.map((p) => {
+        const prefix = seg.label ? `${l.name} · ${seg.label}` : l.name;
+        return (
+          `<li><span>${escapeHtml(prefix)} ${escapeHtml(p.label || "")}</span>` +
+          `<span class="d">${p.depth ? p.depth + " m" : ""}</span></li>`
+        );
+      })
     )
   );
   list.innerHTML =
