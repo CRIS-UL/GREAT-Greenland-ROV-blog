@@ -33,6 +33,20 @@ export const SURVEY_LINES = [
     description:
       "The underwater volcano. Combines the sides-ring survey and the first " +
       "caldera dive.",
+    // Custom connections drawn on the site view. `seq` lists point labels in
+    // the order to join them (labels are unique across this site's segments).
+    paths: [
+      {
+        label: "Mountain-top outline",
+        color: "#e8542f",
+        seq: ["R1", "R6", "R2", "R3", "Top", "Top 2", "R4", "R6"]
+      },
+      {
+        label: "Path travelled",
+        color: "#22d3ee",
+        seq: ["Start", "Mid", "Top", "Top 2"]
+      }
+    ],
     segments: [
       {
         label: "Sides Ring",

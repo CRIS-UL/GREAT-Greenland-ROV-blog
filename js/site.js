@@ -173,9 +173,21 @@ function openSiteView(line) {
   currentSite = line;
   img.src = line.bg || "";
   img.alt = line.name + " bathymetry";
+  const legend = (line.paths && line.paths.length)
+    ? `<span class="sv-legend">` +
+      line.paths
+        .map(
+          (p) =>
+            `<span><i style="background:${p.color || line.color}"></i>` +
+            `${escapeHtml(p.label || "")}</span>`
+        )
+        .join("") +
+      `</span>`
+    : "";
   title.innerHTML =
     `${escapeHtml(line.name)}` +
-    `<span>${escapeHtml(line.feature || "Dive")} · ${fixes(allPointsOf(line).length)}</span>`;
+    `<span>${escapeHtml(line.feature || "Dive")} · ${fixes(allPointsOf(line).length)}</span>` +
+    legend;
 
   sv.hidden = false;
   // Render after layout so the SVG has its pixel size.
@@ -232,22 +244,36 @@ function renderSiteSvg(line, svg) {
 
   let html = "";
 
-  // One polyline per segment (dives are not joined to each other).
-  segs.forEach((seg) => {
-    if (seg.points.length < 2) return;
-    const poly = seg.points
+  const polyLine = (pts, color) => {
+    const poly = pts
       .map((p) => {
         const q = project(p);
         return `${q.x.toFixed(1)},${q.y.toFixed(1)}`;
       })
       .join(" ");
-    html +=
+    return (
       `<polyline points="${poly}" fill="none" stroke="rgba(0,0,0,0.55)" ` +
-      `stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>`;
-    html +=
-      `<polyline points="${poly}" fill="none" stroke="${line.color}" ` +
-      `stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>`;
-  });
+      `stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>` +
+      `<polyline points="${poly}" fill="none" stroke="${color}" ` +
+      `stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>`
+    );
+  };
+
+  if (line.paths && line.paths.length) {
+    // Custom connections defined by point label.
+    const byLabel = new Map(all.map((p) => [p.label, p]));
+    line.paths.forEach((path) => {
+      const pts = (path.seq || [])
+        .map((lbl) => byLabel.get(lbl))
+        .filter(Boolean);
+      if (pts.length > 1) html += polyLine(pts, path.color || line.color);
+    });
+  } else {
+    // Default: one polyline per segment (dives are not joined to each other).
+    segs.forEach((seg) => {
+      if (seg.points.length > 1) html += polyLine(seg.points, line.color);
+    });
+  }
 
   // Fix markers + labels for every point.
   all.forEach((p, i) => {
