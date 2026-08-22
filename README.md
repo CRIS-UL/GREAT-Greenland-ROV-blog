@@ -77,8 +77,8 @@ geotagged.
 The Caldera dives are merged into one site: each is a `segment` so its track
 draws separately under a single Caldera marker.
 
-The Canyon “End” fix was partly obscured in the field notes — it is flagged in
-a comment in `js/survey-data.js` to be filled in once confirmed.
+Both valleys now carry per-fix depths. The Canyon “Extra point” has no depth in
+the source data (it wasn't in the depth file), so it shows “depth not recorded”.
 
 ## How to update it
 

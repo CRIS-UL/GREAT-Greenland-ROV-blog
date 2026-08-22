@@ -80,16 +80,16 @@ export const SURVEY_LINES = [
     color: "#2e86de",
     description:
       "Up-slope transect through a glacier-carved valley (~72.47°N / 13.8°W). " +
-      "Ordered deepest-hole → up the slope. Depths were not captured in the notes.",
+      "Ordered deepest-hole → up the slope.",
     points: [
-      { lat: 72.47080, lon: -13.80521, label: "Deepest Hole" },
-      { lat: 72.47183, lon: -13.80571, label: "Start / ROV start" },
-      { lat: 72.47289, lon: -13.80570, label: "Boulder" },
-      { lat: 72.47384, lon: -13.81380, label: "Start Slope" },
-      { lat: 72.47489, lon: -13.82100, label: "Middle Slope" },
-      { lat: 72.47669, lon: -13.82944, label: "Top Slope" },
+      { lat: 72.47080, lon: -13.80521, depth: 939, label: "Deepest Hole" },
+      { lat: 72.47183, lon: -13.80571, depth: 900, label: "Start / ROV start" },
+      { lat: 72.47289, lon: -13.80570, depth: 852, label: "Boulder" },
+      { lat: 72.47384, lon: -13.81380, depth: 840, label: "Start Slope" },
+      { lat: 72.47489, lon: -13.82100, depth: 759, label: "Middle Slope" },
+      { lat: 72.47669, lon: -13.82944, depth: 615, label: "Top Slope" },
       { lat: 72.47712, lon: -13.83133, label: "ROV end" },
-      { lat: 72.47882, lon: -13.83272, label: "End Slope" }
+      { lat: 72.47882, lon: -13.83272, depth: 593, label: "End Slope" }
     ]
   },
   {
@@ -99,15 +99,13 @@ export const SURVEY_LINES = [
     feature: "Glacial valley",
     color: "#6c5ce7",
     description:
-      "Canyon (glacier-carved valley) dive, ~72.50°N / 14.1°W. Depths were not " +
-      "recorded for most fixes.",
+      "Canyon (glacier-carved valley) dive, ~72.50°N / 14.1°W.",
     points: [
-      { lat: 72.50788, lon: -14.11005, label: "Start" },
-      { lat: 72.50310, lon: -14.10173, label: "Mid Canyon" },
+      { lat: 72.50788, lon: -14.11005, depth: 857.2, label: "Start" },
+      { lat: 72.50310, lon: -14.10173, depth: 644.5, label: "Mid Canyon" },
       { lat: 72.50107, lon: -14.10728, label: "Extra point" },
-      { lat: 72.49837, lon: -14.11115, label: "Top Canyon" }
-      // "End" fix (~72.4_577, -14.10692) had a latitude digit hidden behind the
-      // scroll arrow in the notes — add it here once confirmed.
+      { lat: 72.49837, lon: -14.11115, depth: 432.6, label: "Top Canyon" },
+      { lat: 72.49577, lon: -14.10692, depth: 453.9, label: "End" }
     ]
   }
 ];
