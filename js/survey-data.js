@@ -10,7 +10,7 @@
 // optional (omit it where it wasn't recorded).
 //
 // `feature` labels what the dive was surveying:
-//   "Volcano" (the Caldera), "Seamount" (the mount), "Glacial valley".
+//   "Volcano" (the Caldera) or "Glacial valley".
 //
 // A site normally has a `points` array (one track). A site can instead have
 // `segments` (an array of { label, points }) to hold several dives under one
@@ -31,8 +31,8 @@ export const SURVEY_LINES = [
     feature: "Volcano",
     color: "#e8542f",
     description:
-      "The underwater volcano. Combines the sides-ring survey and the two " +
-      "caldera dives.",
+      "The underwater volcano. Combines the sides-ring survey and the first " +
+      "caldera dive.",
     segments: [
       {
         label: "Sides Ring",
@@ -53,34 +53,7 @@ export const SURVEY_LINES = [
           { lat: 71.02009, lon: -13.17508, depth: 450.0, label: "Top" },
           { lat: 71.01955, lon: -13.17153, depth: 441.9, label: "Top 2" }
         ]
-      },
-      {
-        label: "Second Dive",
-        // ~1.8 km north of the ring. Only the first fix was legible in the
-        // field sheet — add the rest here once digitised.
-        points: [
-          { lat: 71.03997, lon: -13.16065, depth: 464.9, label: "Mid bot" }
-        ]
       }
-    ]
-  },
-
-  // ===================== SEAMOUNT — the mount (~71.00°N / 13.27°W) ==========
-  {
-    id: "seamount-rov1",
-    bg: "images/sites/placeholder-seamount.svg",
-    name: "Seamount — Western Transect",
-    feature: "Seamount",
-    color: "#16a085",
-    description: "Deep-to-shallow transect up the seamount flank, west of the caldera.",
-    points: [
-      { lat: 71.00393333, lon: -13.26673333, depth: 685, label: "1" },
-      { lat: 71.00463333, lon: -13.27271667, depth: 506, label: "2" },
-      { lat: 71.00456667, lon: -13.27468333, depth: 520, label: "3" },
-      { lat: 71.00460000, lon: -13.27693333, depth: 485, label: "4" },
-      { lat: 71.00585000, lon: -13.28128333, depth: 401, label: "5" }
-      // A 6th fix (71.00583333, ~-13.28x, 413 m) had its longitude digit cut
-      // off in the field sheet — add it here once confirmed.
     ]
   },
 

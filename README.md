@@ -70,17 +70,15 @@ geotagged.
 
 | Site (marker) | Feature | Fixes |
 |---|---|---|
-| **Caldera** (Sides Ring + First Dive + Second Dive as segments) | Volcano | 11 |
-| Seamount — Western Transect | Seamount | 5 |
+| **Caldera** (Sides Ring + First Dive as segments) | Volcano | 10 |
 | Glacial Valley — Slope Dive | Glacial valley | 8 |
 | Glacial Valley — Canyon Dive | Glacial valley | 4 |
 
-The three Caldera dives are merged into one site: each is a `segment` so its
-track draws separately under a single Caldera marker.
+The Caldera dives are merged into one site: each is a `segment` so its track
+draws separately under a single Caldera marker.
 
-A few fixes were partly obscured in the field notes (Caldera Second Dive fixes,
-the seamount 6th fix, and the Canyon “End” fix) — these are flagged in comments
-in `js/survey-data.js` to be filled in once confirmed.
+The Canyon “End” fix was partly obscured in the field notes — it is flagged in
+a comment in `js/survey-data.js` to be filled in once confirmed.
 
 ## How to update it
 
