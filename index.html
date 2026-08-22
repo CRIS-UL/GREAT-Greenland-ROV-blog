@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GREAT Greenland ROV — Aquarius Project</title>
+  <title>GREAT Greenland ROV | Aquarius Project</title>
   <meta name="description" content="ROV survey of Greenland seamounts and underwater volcanoes as part of the Aquarius Project — survey map, ROV CAD model and photo gallery." />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
 
   <!-- Leaflet (map) -->
   <link
@@ -23,20 +24,25 @@
 </head>
 
 <body>
-  <!-- NAV -->
-  <nav class="nav">
-    <div class="wrap">
-      <div class="brand"><span class="dot"></span> GREAT Greenland ROV</div>
-      <a class="link" href="#about">About</a>
-      <a class="link" href="#map-section">Survey map</a>
-      <a class="link" href="#cad">ROV model</a>
-      <a class="link" href="#photos">Gallery</a>
+  <!-- TOP WHITE BAR WITH LOGOS -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <img src="assets/cris_logo.png" class="cris-logo" alt="CRIS Logo" />
+      <img src="assets/ul_logo.png" class="ul-logo" alt="University of Limerick Logo" />
     </div>
+  </header>
+
+  <!-- BLUE NAV BAR -->
+  <nav class="navbar">
+    <a href="#about" class="nav-item active">Overview</a>
+    <a href="#map-section" class="nav-item">Survey Map</a>
+    <a href="#cad" class="nav-item">ROV Model</a>
+    <a href="#photos" class="nav-item">Gallery</a>
   </nav>
 
-  <!-- HERO / DESCRIPTION -->
-  <header class="hero" id="about">
-    <div class="wrap">
+  <main class="content">
+    <!-- DESCRIPTION -->
+    <section class="hero" id="about">
       <div class="eyebrow">Aquarius Project · Greenland Mission</div>
       <h1>Surveying Greenland's seamounts &amp; underwater volcanoes</h1>
       <p class="lead">
@@ -44,9 +50,12 @@
         operated vehicle (ROV) off the coast of Greenland to survey submarine
         <b>seamounts</b> and <b>underwater volcanoes</b>. Each dive traced a
         transect down the volcanic flanks, logging position and depth at every
-        fix and capturing imagery of the seafloor. This page brings the mission
-        together: a map of the locations we surveyed, an interactive 3D model of
-        the ROV, and a gallery of imagery from the dives.
+        fix and capturing imagery of the seafloor.
+      </p>
+      <p>
+        This page brings the mission together: a map of the locations we
+        surveyed, an interactive 3D model of the ROV, and a gallery of imagery
+        from the dives.
       </p>
       <div class="badges">
         <span class="badge"><b>Region</b> · Greenland Sea (~71°N)</span>
@@ -54,31 +63,32 @@
         <span class="badge"><b>Platform</b> · ROV</span>
         <span class="badge"><b>Programme</b> · Aquarius Project</span>
       </div>
-    </div>
-  </header>
+    </section>
 
-  <!-- MAP -->
-  <section id="map-section">
-    <div class="wrap">
+    <!-- MAP -->
+    <section class="section" id="map-section">
       <div class="section-head">
         <div class="kicker">Where we surveyed</div>
-        <h2>ROV survey map</h2>
+        <h2>ROV Survey Map</h2>
         <p>
-          Dive transects and individual position fixes over the survey area.
-          Click a point for its coordinates and depth. More lines and points can
-          be added in <code>js/survey-data.js</code>.
+          Each survey location is shown as a single marker. Click a marker to
+          reveal the dive track — the individual position fixes we travelled,
+          with depths. Use the “All locations” button to zoom back out.
         </p>
       </div>
 
       <div class="map-grid">
         <div id="map"></div>
         <aside class="map-side">
+          <div class="map-hint" id="map-hint">
+            Tip: click the blue location marker to open its dive track.
+          </div>
           <h3>Survey lines</h3>
           <div id="legend"></div>
 
           <div class="stat-row">
             <div class="stat"><div class="n" id="stat-points">0</div><div class="l">Fixes</div></div>
-            <div class="stat"><div class="n" id="stat-lines">0</div><div class="l">Lines</div></div>
+            <div class="stat"><div class="n" id="stat-lines">0</div><div class="l">Locations</div></div>
           </div>
           <div class="stat-row">
             <div class="stat"><div class="n" id="stat-deep">—</div><div class="l">Deepest</div></div>
@@ -89,37 +99,33 @@
           <ul class="pt-list" id="pt-list"></ul>
         </aside>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- CAD -->
-  <section id="cad">
-    <div class="wrap">
+    <!-- CAD -->
+    <section class="section" id="cad">
       <div class="section-head">
         <div class="kicker">The vehicle</div>
-        <h2>ROV CAD model</h2>
+        <h2>ROV CAD Model</h2>
         <p>
           Interactive 3D model of the ROV used on the mission. Drag to orbit,
-          scroll to zoom, and use the control panel to reset the view, auto-rotate
-          or toggle wireframe.
+          scroll to zoom, and use the control panel to reset the view,
+          auto-rotate or toggle wireframe.
         </p>
       </div>
       <div class="cad-frame">
         <iframe src="cad/index.html" title="ROV CAD viewer" loading="lazy"></iframe>
       </div>
       <p class="cad-note">
-        Model rendered with Three.js. Open the
-        <a href="cad/index.html" target="_blank" rel="noopener">viewer in full screen</a>.
+        Model rendered with Three.js.
+        <a href="cad/index.html" target="_blank" rel="noopener">Open the viewer in full screen ↗</a>
       </p>
-    </div>
-  </section>
+    </section>
 
-  <!-- GALLERY -->
-  <section id="photos">
-    <div class="wrap">
+    <!-- GALLERY -->
+    <section class="section" id="photos">
       <div class="section-head">
         <div class="kicker">From the dives</div>
-        <h2>Photo gallery</h2>
+        <h2>Photo Gallery</h2>
         <p>
           Imagery from the survey. To add photos, commit image files into the
           <code>images/</code> folder and list them in
@@ -127,14 +133,29 @@
         </p>
       </div>
       <div class="gallery" id="gallery"></div>
-    </div>
-  </section>
+    </section>
+  </main>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="wrap">
-      <div>GREAT Greenland ROV · Aquarius Project</div>
-      <div><a href="https://github.com/LukeGrif/GREAT-Greenland-ROV" target="_blank" rel="noopener">View on GitHub</a></div>
+  <!-- FOOTER (CRIS-UL style) -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <img src="assets/ul_cris_footer_logo.png" alt="UL CRIS Logo" class="footer-logo" />
+        <p>
+          We are the only research centre in Ireland focused on<br />
+          the development of marine robotics.
+        </p>
+        <p class="footer-author">
+          Author: <a href="https://github.com/LukeGrif/" target="_blank" rel="noopener">Luke Griffin</a>
+        </p>
+      </div>
+      <div class="footer-right">
+        <h3>AQUARIUS PROJECT</h3>
+        <a href="#map-section" class="footer-link">Survey Map →</a><br />
+        <a href="#cad" class="footer-link">ROV Model →</a><br />
+        <a href="#photos" class="footer-link">Gallery →</a><br />
+        <a href="https://github.com/LukeGrif/GREAT-Greenland-ROV" class="footer-link" target="_blank" rel="noopener">View on GitHub →</a>
+      </div>
     </div>
   </footer>
 

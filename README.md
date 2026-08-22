@@ -14,13 +14,18 @@ Greenland.
 - **ROV CAD model** — an interactive Three.js 3D viewer (embedded from `cad/`).
 - **Photo gallery** — imagery from the dives.
 
+The look and feel (blue `#0083c1`, white logo bar, blue nav/footer) matches the
+main [CRIS-UL site](https://github.com/CRIS-UL/cris-ul.github.io).
+
 ## Repository layout
 
 ```
 index.html            Main single-page site
-css/site.css          Site styles
+favicon.ico           Site icon
+css/site.css          Site styles (CRIS-UL palette)
 js/site.js            Map + gallery logic
 js/survey-data.js     Survey lines / coordinates (edit this to add points)
+assets/               CRIS / UL logos used in the header and footer
 cad/                  Embedded Three.js ROV CAD viewer
   index.html
   css/styles.css
@@ -31,6 +36,14 @@ images/               Gallery images
   placeholder-*.svg   Placeholders (replace with real photos)
 .nojekyll             Serve files as-is on GitHub Pages
 ```
+
+## How the map works
+
+Each survey location shows as a **single marker** on a zoomed-out ocean map.
+Click a marker to reveal that dive's **track** — the individual fixes we
+travelled, each with its depth — and the map zooms to it. An **“All locations”**
+button returns to the overview. The basemap upscales its last available tiles
+past zoom 13, so the map is never blank when you zoom in.
 
 ## How to update it
 
