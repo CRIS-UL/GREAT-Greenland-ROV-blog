@@ -39,7 +39,7 @@ export const SURVEY_LINES = [
       {
         label: "Mountain-top outline",
         color: "#e8542f",
-        seq: ["R1", "R6", "R2", "R3", "Top", "Top 2", "R4", "R6"]
+        seq: ["R1", "R5", "R2", "R3", "Top", "Top 2", "R4", "R6"]
       },
       {
         label: "Path travelled",
