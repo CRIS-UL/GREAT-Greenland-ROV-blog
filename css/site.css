@@ -140,13 +140,67 @@ p.lead { font-size: 18px; }
 .map-grid { display: grid; grid-template-columns: 1fr 320px; gap: 22px; }
 @media (max-width: 860px) { .map-grid { grid-template-columns: 1fr; } }
 
-#map {
+.map-stage {
+  position: relative;
   height: 480px;
   border-radius: 6px;
   border: 1px solid var(--border);
   box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+#map {
+  position: absolute;
+  inset: 0;
+  height: 100%;
   z-index: 1;
 }
+
+/* ---------- SITE VIEW (image backdrop + fixed points) ---------- */
+#siteview {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: #04121c;
+}
+#siteview[hidden] { display: none; }
+#siteview-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+#siteview-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+#siteview-title {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(4, 18, 28, 0.72);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  max-width: 70%;
+}
+#siteview-title span { display: block; font-weight: normal; font-size: 12px; opacity: 0.85; }
+#siteview-back { position: absolute; top: 12px; right: 12px; }
+.sv-label {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  fill: #ffffff;
+  paint-order: stroke;
+  stroke: rgba(0, 0, 0, 0.85);
+  stroke-width: 3px;
+  font-weight: bold;
+}
+.sv-depth { font-size: 11px; font-weight: normal; }
 .map-side {
   background: var(--card);
   border: 1px solid var(--border);
@@ -166,7 +220,8 @@ p.lead { font-size: 18px; }
   padding: 8px 10px;
   margin-bottom: 12px;
 }
-.legend-line { display: flex; align-items: flex-start; gap: 8px; font-size: 14px; margin: 8px 0; font-weight: bold; color: var(--heading); }
+.legend-line { display: flex; align-items: flex-start; gap: 8px; font-size: 14px; margin: 4px -6px; padding: 4px 6px; border-radius: 6px; font-weight: bold; color: var(--heading); cursor: pointer; transition: background 0.15s; }
+.legend-line:hover, .legend-line:focus { background: #eef7fc; outline: none; }
 .legend-line .swatch { width: 14px; height: 14px; border-radius: 4px; margin-top: 3px; flex: 0 0 auto; }
 .legend-text { display: flex; flex-direction: column; line-height: 1.25; }
 .legend-sub { font-weight: normal; color: var(--muted); font-size: 12px; }

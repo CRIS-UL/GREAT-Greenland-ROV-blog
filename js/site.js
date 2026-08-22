@@ -3,33 +3,52 @@ import { SURVEY_LINES } from "./survey-data.js";
 
 /* ---------------------------------------------------------------------------
    MAP
-   - Single "location" marker per survey line (zoomed-out overview).
-   - Click a marker to reveal the dive track (the fixes we travelled) + zoom in.
-   - "All locations" button returns to the overview.
+   - The interactive map is locked to the Greenland–Iceland region so the sites
+     sit in context and you can't roam to the rest of the world.
+   - One marker per dive. Clicking a marker opens a static "site view": the
+     dive's bathymetry image with its fixes fixed in place over it. A back
+     button returns to the region map.
 --------------------------------------------------------------------------- */
-const OVERVIEW_MAX_ZOOM = 9;   // how far in the overview is allowed to zoom
-const TRACK_MAX_ZOOM = 13;     // how far in a single track zooms
-const NATIVE_MAX_ZOOM = 13;    // last zoom the ocean basemap actually has tiles for
+const NATIVE_MAX_ZOOM = 13; // last zoom the ocean basemap has real tiles for
+
+// The window the map is locked to (roughly east Greenland → Iceland → sites).
+const REGION_FIT = [
+  [62.0, -40.0],
+  [73.8, -7.0]
+];
+const REGION_MAX_BOUNDS = [
+  [58.0, -52.0],
+  [77.0, 3.0]
+];
 
 let map;
 let overviewMarkers = [];
-let detailLayers = [];         // polyline + fix markers currently shown
-let backControl = null;
+let currentSite = null;
 
 function linesWithPoints() {
   return SURVEY_LINES.filter((l) => l.points && l.points.length);
 }
 
 function centroid(points) {
-  return [
-    avg(points.map((p) => p.lat)),
-    avg(points.map((p) => p.lon))
-  ];
+  return [avg(points.map((p) => p.lat)), avg(points.map((p) => p.lon))];
 }
 
-// Group dives whose centroids are within `thresh` degrees and return a
-// Map of line.id -> index within its cluster (for label stacking).
-function assignStacks(entries, thresh = 0.005) {
+function haversineKm(a, b) {
+  const R = 6371;
+  const dLat = ((b[0] - a[0]) * Math.PI) / 180;
+  const dLon = ((b[1] - a[1]) * Math.PI) / 180;
+  const la1 = (a[0] * Math.PI) / 180;
+  const la2 = (b[0] * Math.PI) / 180;
+  const h =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(la1) * Math.cos(la2) * Math.sin(dLon / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+// Group dives whose centroids are within `thresholdKm` and return a Map of
+// line.id -> index within its cluster (so their labels stack instead of
+// hiding each other at the zoomed-out region scale).
+function assignStacks(entries, thresholdKm = 25) {
   const idx = new Map();
   const used = new Array(entries.length).fill(false);
   for (let i = 0; i < entries.length; i++) {
@@ -38,10 +57,7 @@ function assignStacks(entries, thresh = 0.005) {
     used[i] = true;
     for (let j = i + 1; j < entries.length; j++) {
       if (used[j]) continue;
-      if (
-        Math.abs(entries[i].c[0] - entries[j].c[0]) < thresh &&
-        Math.abs(entries[i].c[1] - entries[j].c[1]) < thresh
-      ) {
+      if (haversineKm(entries[i].c, entries[j].c) < thresholdKm) {
         group.push(j);
         used[j] = true;
       }
@@ -63,22 +79,21 @@ function initMap() {
       el.style.color = "#6a7178";
       el.innerHTML =
         "The map library could not be loaded (no network). " +
-        "The survey fixes are listed in the panel on the right.";
+        "Click a dive in the list, or the fixes are shown on the right.";
     }
     return;
   }
 
-  const fallbackCenter = [71.005, -13.275];
-
   map = L.map("map", {
     scrollWheelZoom: false,
-    minZoom: 3,
+    maxBounds: REGION_MAX_BOUNDS,
+    maxBoundsViscosity: 1.0,
+    minZoom: 4,
     maxZoom: 18
-  }).setView(fallbackCenter, OVERVIEW_MAX_ZOOM);
+  });
 
   // Ocean basemap. maxNativeZoom lets Leaflet UPSCALE the last real tile
-  // instead of showing blank tiles when the user zooms past the source's
-  // coverage — so the map is never empty.
+  // instead of showing blank tiles when zoomed past the source's coverage.
   L.tileLayer(
     "https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}",
     {
@@ -89,33 +104,32 @@ function initMap() {
     }
   ).addTo(map);
 
-  // Place-name / reference labels on top (also upscaled past native zoom).
   L.tileLayer(
     "https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Reference/MapServer/tile/{z}/{y}/{x}",
     { maxNativeZoom: NATIVE_MAX_ZOOM, maxZoom: 18 }
   ).addTo(map);
 
-  showOverview(true);
+  map.fitBounds(REGION_FIT);
+  // Lock zoom-out at the region framing — can't reach the rest of the world.
+  map.setMinZoom(map.getZoom());
+
+  buildOverview();
+
+  const back = document.getElementById("siteview-back");
+  if (back) back.addEventListener("click", closeSiteView);
 }
 
-/* ---------- Overview: one marker per location ---------- */
-function showOverview(initial = false) {
-  clearDetail();
-  removeBackControl();
+/* ---------- Region overview: one marker per dive ---------- */
+function buildOverview() {
+  overviewMarkers.forEach((m) => map.removeLayer(m));
+  overviewMarkers = [];
 
   const lines = linesWithPoints();
-  const centers = [];
-
-  // Compute centroids, then stack the labels of co-located dives vertically
-  // so none hides another (e.g. the two Caldera dives sit almost on top of
-  // each other). Markers still point at each dive's true centroid.
   const entries = lines.map((line) => ({ line, c: centroid(line.points) }));
   const stack = assignStacks(entries);
 
   entries.forEach(({ line, c }) => {
-    centers.push(c);
     const idx = stack.get(line.id) || 0;
-
     const icon = L.divIcon({
       className: "loc-pin-wrap",
       html:
@@ -124,100 +138,105 @@ function showOverview(initial = false) {
       iconSize: null,
       iconAnchor: [-12, 10 + idx * 30]
     });
-
     const marker = L.marker(c, { icon }).addTo(map);
-    marker.on("click", () => expandLine(line));
-    marker.bindTooltip(
-      `${line.feature || "Dive"} — click to view the ${line.points.length}-fix track`,
-      { direction: "top" }
-    );
+    marker.on("click", () => openSiteView(line));
+    marker.bindTooltip(`${line.feature || "Dive"} — open dive`, {
+      direction: "top"
+    });
     overviewMarkers.push(marker);
   });
 
-  setHint("Tip: click a location marker to open its dive track.");
-
-  if (!initial) {
-    if (centers.length > 1) {
-      map.fitBounds(centers, { padding: [60, 60], maxZoom: OVERVIEW_MAX_ZOOM });
-    } else if (centers.length === 1) {
-      map.setView(centers[0], OVERVIEW_MAX_ZOOM);
-    }
-  } else if (centers.length) {
-    // Initial load: start zoomed out and centred on the survey area.
-    if (centers.length > 1) {
-      map.fitBounds(centers, { padding: [60, 60], maxZoom: OVERVIEW_MAX_ZOOM });
-    } else {
-      map.setView(centers[0], OVERVIEW_MAX_ZOOM);
-    }
-  }
+  setHint("Tip: click a site marker to open its dive over the bathymetry.");
 }
 
-/* ---------- Detail: the fixes we travelled for one location ---------- */
-function expandLine(line) {
-  // Hide overview markers.
-  overviewMarkers.forEach((m) => map.removeLayer(m));
-  overviewMarkers = [];
-  clearDetail();
+/* ---------- Site view: bathymetry image + fixed points ---------- */
+function openSiteView(line) {
+  const sv = document.getElementById("siteview");
+  const img = document.getElementById("siteview-img");
+  const svg = document.getElementById("siteview-svg");
+  const title = document.getElementById("siteview-title");
+  if (!sv || !img || !svg || !title) return;
 
-  const latlngs = line.points.map((p) => [p.lat, p.lon]);
+  currentSite = line;
+  img.src = line.bg || "";
+  img.alt = line.name + " bathymetry";
+  title.innerHTML =
+    `${escapeHtml(line.name)}` +
+    `<span>${escapeHtml(line.feature || "Dive")} · ${fixes(line.points.length)}</span>`;
 
-  const poly = L.polyline(latlngs, {
-    color: line.color,
-    weight: 3,
-    opacity: 0.9
-  }).addTo(map);
-  detailLayers.push(poly);
+  sv.hidden = false;
+  // Render after layout so the SVG has its pixel size.
+  requestAnimationFrame(() => renderSiteSvg(line, svg));
+  setHint(`Viewing <b>${escapeHtml(line.name)}</b>. Use “All sites” to return.`);
+}
 
-  line.points.forEach((p, i) => {
-    const marker = L.circleMarker([p.lat, p.lon], {
-      radius: 6,
-      color: "#ffffff",
-      weight: 2,
-      fillColor: line.color,
-      fillOpacity: 0.95
-    })
-      .addTo(map)
-      .bindPopup(
-        `<b>${line.name}</b><br>` +
-          `<span style="color:#6a7178">${line.feature || "Dive"} · ${p.label || "fix " + (i + 1)}</span><br>` +
-          `Lat ${p.lat.toFixed(5)}<br>` +
-          `Lon ${p.lon.toFixed(5)}<br>` +
-          (p.depth ? `Depth <b>${p.depth} m</b>` : "<i>depth not recorded</i>")
-      );
-    detailLayers.push(marker);
+function closeSiteView() {
+  const sv = document.getElementById("siteview");
+  if (sv) sv.hidden = true;
+  currentSite = null;
+  if (map) map.invalidateSize();
+  setHint("Tip: click a site marker to open its dive over the bathymetry.");
+}
+
+// Map the dive's fixes into the image area, preserving relative geometry
+// (with a cos(lat) correction) and north-up orientation.
+function layoutPoints(points, W, H, pad) {
+  const lats = points.map((p) => p.lat);
+  const lons = points.map((p) => p.lon);
+  const minLat = Math.min(...lats);
+  const maxLat = Math.max(...lats);
+  const minLon = Math.min(...lons);
+  const maxLon = Math.max(...lons);
+  const k = Math.cos(((minLat + maxLat) / 2) * (Math.PI / 180));
+  const geoW = Math.max((maxLon - minLon) * k, 1e-9);
+  const geoH = Math.max(maxLat - minLat, 1e-9);
+  const availW = Math.max(W - 2 * pad, 10);
+  const availH = Math.max(H - 2 * pad, 10);
+  const scale = Math.min(availW / geoW, availH / geoH);
+  const drawW = geoW * scale;
+  const drawH = geoH * scale;
+  const offX = (W - drawW) / 2;
+  const offY = (H - drawH) / 2;
+  return points.map((p) => ({
+    p,
+    x: offX + (p.lon - minLon) * k * scale,
+    y: offY + (maxLat - p.lat) * scale
+  }));
+}
+
+function renderSiteSvg(line, svg) {
+  const host = svg.parentElement;
+  const W = svg.clientWidth || host.clientWidth || 600;
+  const H = svg.clientHeight || host.clientHeight || 480;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+
+  const pts = layoutPoints(line.points, W, H, 64);
+  const poly = pts.map((o) => `${o.x.toFixed(1)},${o.y.toFixed(1)}`).join(" ");
+
+  let html = "";
+  if (pts.length > 1) {
+    html +=
+      `<polyline points="${poly}" fill="none" stroke="rgba(0,0,0,0.55)" ` +
+      `stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>`;
+    html +=
+      `<polyline points="${poly}" fill="none" stroke="${line.color}" ` +
+      `stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+  }
+  pts.forEach((o, i) => {
+    const p = o.p;
+    const name = p.label || "fix " + (i + 1);
+    const depthTxt = p.depth ? ` · ${p.depth} m` : "";
+    html +=
+      `<circle cx="${o.x.toFixed(1)}" cy="${o.y.toFixed(1)}" r="6.5" ` +
+      `fill="${line.color}" stroke="#fff" stroke-width="2">` +
+      `<title>${escapeHtml(name)}${escapeHtml(depthTxt)} — ` +
+      `${p.lat.toFixed(5)}, ${p.lon.toFixed(5)}</title></circle>`;
+    html +=
+      `<text class="sv-label" x="${(o.x + 11).toFixed(1)}" ` +
+      `y="${(o.y + 4).toFixed(1)}">${escapeHtml(name)}` +
+      `<tspan class="sv-depth">${escapeHtml(depthTxt)}</tspan></text>`;
   });
-
-  map.fitBounds(latlngs, { padding: [50, 50], maxZoom: TRACK_MAX_ZOOM });
-  setHint(`Showing <b>${line.name}</b> — ${line.points.length} fixes travelled.`);
-  addBackControl();
-}
-
-function clearDetail() {
-  detailLayers.forEach((l) => map.removeLayer(l));
-  detailLayers = [];
-}
-
-/* ---------- "All locations" button ---------- */
-function addBackControl() {
-  removeBackControl();
-  const ctrl = L.control({ position: "topright" });
-  ctrl.onAdd = function () {
-    const div = L.DomUtil.create("div");
-    div.innerHTML =
-      '<button class="map-back-btn">← All locations</button>';
-    L.DomEvent.disableClickPropagation(div);
-    div.querySelector("button").addEventListener("click", () => showOverview(false));
-    return div;
-  };
-  ctrl.addTo(map);
-  backControl = ctrl;
-}
-
-function removeBackControl() {
-  if (backControl) {
-    map.removeControl(backControl);
-    backControl = null;
-  }
+  svg.innerHTML = html;
 }
 
 function setHint(html) {
@@ -232,10 +251,24 @@ function buildSidePanel() {
   const legend = document.getElementById("legend");
   legend.innerHTML = SURVEY_LINES.map(
     (l) =>
-      `<div class="legend-line"><span class="swatch" style="background:${l.color}"></span>` +
-      `<span class="legend-text">${l.name}` +
-      `<span class="legend-sub">${l.feature || ""} · ${fixes(l.points.length)}</span></span></div>`
+      `<div class="legend-line" data-id="${l.id}" role="button" tabindex="0" title="Open ${escapeHtml(l.name)}">` +
+      `<span class="swatch" style="background:${l.color}"></span>` +
+      `<span class="legend-text">${escapeHtml(l.name)}` +
+      `<span class="legend-sub">${escapeHtml(l.feature || "")} · ${fixes(l.points.length)}</span></span></div>`
   ).join("");
+  // Let the legend rows open a site too (works even without the map).
+  legend.querySelectorAll(".legend-line").forEach((row) => {
+    const line = SURVEY_LINES.find((l) => l.id === row.dataset.id);
+    if (!line) return;
+    const open = () => openSiteView(line);
+    row.addEventListener("click", open);
+    row.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        open();
+      }
+    });
+  });
 
   const depths = allPoints.map((p) => p.depth).filter(Boolean);
   document.getElementById("stat-points").textContent = allPoints.length;
@@ -251,7 +284,7 @@ function buildSidePanel() {
   const rows = SURVEY_LINES.flatMap((l) =>
     l.points.map(
       (p) =>
-        `<li><span>${l.name} ${p.label || ""}</span>` +
+        `<li><span>${escapeHtml(l.name)} ${escapeHtml(p.label || "")}</span>` +
         `<span class="d">${p.depth ? p.depth + " m" : ""}</span></li>`
     )
   );
@@ -338,7 +371,7 @@ function initNavSpy() {
    INIT
 --------------------------------------------------------------------------- */
 window.addEventListener("DOMContentLoaded", () => {
-  buildSidePanel();       // stats + fix list, independent of the map/network
+  buildSidePanel(); // stats + fix list + clickable legend, independent of the map
   try {
     initMap();
   } catch (err) {
@@ -346,4 +379,12 @@ window.addEventListener("DOMContentLoaded", () => {
   }
   initGallery();
   initNavSpy();
+});
+
+// Re-fit the current site view on resize.
+window.addEventListener("resize", () => {
+  if (currentSite) {
+    const svg = document.getElementById("siteview-svg");
+    if (svg) renderSiteSvg(currentSite, svg);
+  }
 });

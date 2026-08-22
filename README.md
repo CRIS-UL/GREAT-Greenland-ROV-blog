@@ -39,13 +39,31 @@ images/               Gallery images
 
 ## How the map works
 
-Each **dive** shows as a **single marker** on a zoomed-out ocean map, coloured
-by the feature it surveyed — the **volcano** (the Caldera), the **seamount**,
-and two glacier-carved **valleys**. Click a marker to reveal that dive's
-**track** — the individual fixes travelled, each with its depth — and the map
-zooms to it. An **“All locations”** button returns to the overview. The basemap
-upscales its last available tiles past zoom 13, so the map is never blank when
-you zoom in.
+The interactive map is **locked to the Greenland–Iceland region** (`REGION_FIT`
+/ `REGION_MAX_BOUNDS` in `js/site.js`) so the sites sit in context and you can't
+pan or zoom out to the rest of the world.
+
+Each **dive** shows as a **single marker**, coloured by the feature it surveyed
+— the **volcano** (the Caldera), the **seamount**, and two glacier-carved
+**valleys**. Clicking a marker (or a row in the legend) opens a **site view**:
+the dive's **bathymetry image** fills the frame and the fixes are plotted and
+fixed in place over it, joined by the dive track, each labelled with its depth.
+The **“All sites”** button returns to the region map.
+
+### Site background images (`images/sites/`)
+
+Each dive points at a background image via its `bg` field in
+`js/survey-data.js`:
+
+- **Caldera** dives → `images/sites/caldera.jpg` (the real bathymetry render).
+- **Seamount** and the two **valleys** → placeholder SVGs
+  (`placeholder-seamount.svg`, `placeholder-valley-slope.svg`,
+  `placeholder-valley-canyon.svg`). Replace these with the real renders when
+  available (keep the filenames, or update the `bg` paths).
+
+The fixes are fitted to the image frame (relative geometry preserved,
+north-up); they are not georeferenced to the image, since the renders aren't
+geotagged.
 
 ### Surveyed dives (in `js/survey-data.js`)
 

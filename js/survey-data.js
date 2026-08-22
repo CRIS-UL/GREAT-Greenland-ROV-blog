@@ -20,6 +20,7 @@ export const SURVEY_LINES = [
   // ===================== VOLCANO — the Caldera (~71.02°N / 13.17°W) =========
   {
     id: "caldera-ring",
+    bg: "images/sites/caldera.jpg",
     name: "Caldera — Sides Ring",
     feature: "Volcano",
     color: "#e8542f",
@@ -35,6 +36,7 @@ export const SURVEY_LINES = [
   },
   {
     id: "caldera-first",
+    bg: "images/sites/caldera.jpg",
     name: "Caldera — First Dive",
     feature: "Volcano",
     color: "#f39c12",
@@ -48,6 +50,7 @@ export const SURVEY_LINES = [
   },
   {
     id: "caldera-second",
+    bg: "images/sites/caldera.jpg",
     name: "Caldera — Second Dive",
     feature: "Volcano",
     color: "#c0392b",
@@ -63,6 +66,7 @@ export const SURVEY_LINES = [
   // ===================== SEAMOUNT — the mount (~71.00°N / 13.27°W) ==========
   {
     id: "seamount-rov1",
+    bg: "images/sites/placeholder-seamount.svg",
     name: "Seamount — Western Transect",
     feature: "Seamount",
     color: "#16a085",
@@ -81,6 +85,7 @@ export const SURVEY_LINES = [
   // ===================== GLACIAL VALLEYS (north, ~72.5°N) ===================
   {
     id: "valley-slope",
+    bg: "images/sites/placeholder-valley-slope.svg",
     name: "Glacial Valley — Slope Dive",
     feature: "Glacial valley",
     color: "#2e86de",
@@ -100,6 +105,7 @@ export const SURVEY_LINES = [
   },
   {
     id: "valley-canyon",
+    bg: "images/sites/placeholder-valley-canyon.svg",
     name: "Glacial Valley — Canyon Dive",
     feature: "Glacial valley",
     color: "#6c5ce7",

@@ -73,19 +73,27 @@
         <div class="kicker">Where we surveyed</div>
         <h2>ROV Survey Map</h2>
         <p>
-          Each dive is shown as a single marker, coloured by what it surveyed —
+          The map is locked to the Greenland–Iceland region so the sites sit in
+          context. Each dive is a single marker, coloured by what it surveyed —
           the <b>volcano</b> (the Caldera), the <b>seamount</b>, and two
-          glacier-carved <b>valleys</b>. Click a marker to reveal that dive's
-          track — the fixes we travelled, with depths where recorded. Use the
-          “All locations” button to zoom back out.
+          glacier-carved <b>valleys</b>. Click a marker to open that dive over
+          its bathymetry, with the fixes we travelled fixed in place.
         </p>
       </div>
 
       <div class="map-grid">
-        <div id="map"></div>
+        <div class="map-stage">
+          <div id="map"></div>
+          <div id="siteview" hidden>
+            <img id="siteview-img" alt="" />
+            <svg id="siteview-svg" preserveAspectRatio="none"></svg>
+            <div id="siteview-title"></div>
+            <button id="siteview-back" class="map-back-btn" type="button">← All sites</button>
+          </div>
+        </div>
         <aside class="map-side">
           <div class="map-hint" id="map-hint">
-            Tip: click the blue location marker to open its dive track.
+            Tip: click a site marker to open its dive over the bathymetry.
           </div>
           <h3>Dives</h3>
           <div id="legend"></div>
