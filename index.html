@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GREAT Greenland ROV — Aquarius Project</title>
+  <meta name="description" content="ROV survey of Greenland seamounts and underwater volcanoes as part of the Aquarius Project — survey map, ROV CAD model and photo gallery." />
+
+  <!-- Leaflet (map) -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+
+  <link rel="stylesheet" href="css/site.css" />
+</head>
+
+<body>
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="wrap">
+      <div class="brand"><span class="dot"></span> GREAT Greenland ROV</div>
+      <a class="link" href="#about">About</a>
+      <a class="link" href="#map-section">Survey map</a>
+      <a class="link" href="#cad">ROV model</a>
+      <a class="link" href="#photos">Gallery</a>
+    </div>
+  </nav>
+
+  <!-- HERO / DESCRIPTION -->
+  <header class="hero" id="about">
+    <div class="wrap">
+      <div class="eyebrow">Aquarius Project · Greenland Mission</div>
+      <h1>Surveying Greenland's seamounts &amp; underwater volcanoes</h1>
+      <p class="lead">
+        As part of the <b>Aquarius Project</b>, our team deployed a remotely
+        operated vehicle (ROV) off the coast of Greenland to survey submarine
+        <b>seamounts</b> and <b>underwater volcanoes</b>. Each dive traced a
+        transect down the volcanic flanks, logging position and depth at every
+        fix and capturing imagery of the seafloor. This page brings the mission
+        together: a map of the locations we surveyed, an interactive 3D model of
+        the ROV, and a gallery of imagery from the dives.
+      </p>
+      <div class="badges">
+        <span class="badge"><b>Region</b> · Greenland Sea (~71°N)</span>
+        <span class="badge"><b>Targets</b> · Seamounts &amp; submarine volcanoes</span>
+        <span class="badge"><b>Platform</b> · ROV</span>
+        <span class="badge"><b>Programme</b> · Aquarius Project</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAP -->
+  <section id="map-section">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Where we surveyed</div>
+        <h2>ROV survey map</h2>
+        <p>
+          Dive transects and individual position fixes over the survey area.
+          Click a point for its coordinates and depth. More lines and points can
+          be added in <code>js/survey-data.js</code>.
+        </p>
+      </div>
+
+      <div class="map-grid">
+        <div id="map"></div>
+        <aside class="map-side">
+          <h3>Survey lines</h3>
+          <div id="legend"></div>
+
+          <div class="stat-row">
+            <div class="stat"><div class="n" id="stat-points">0</div><div class="l">Fixes</div></div>
+            <div class="stat"><div class="n" id="stat-lines">0</div><div class="l">Lines</div></div>
+          </div>
+          <div class="stat-row">
+            <div class="stat"><div class="n" id="stat-deep">—</div><div class="l">Deepest</div></div>
+            <div class="stat"><div class="n" id="stat-shallow">—</div><div class="l">Shallowest</div></div>
+          </div>
+
+          <h3 style="margin-top:16px">Fixes</h3>
+          <ul class="pt-list" id="pt-list"></ul>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAD -->
+  <section id="cad">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">The vehicle</div>
+        <h2>ROV CAD model</h2>
+        <p>
+          Interactive 3D model of the ROV used on the mission. Drag to orbit,
+          scroll to zoom, and use the control panel to reset the view, auto-rotate
+          or toggle wireframe.
+        </p>
+      </div>
+      <div class="cad-frame">
+        <iframe src="cad/index.html" title="ROV CAD viewer" loading="lazy"></iframe>
+      </div>
+      <p class="cad-note">
+        Model rendered with Three.js. Open the
+        <a href="cad/index.html" target="_blank" rel="noopener">viewer in full screen</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="photos">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">From the dives</div>
+        <h2>Photo gallery</h2>
+        <p>
+          Imagery from the survey. To add photos, commit image files into the
+          <code>images/</code> folder and list them in
+          <code>images/manifest.json</code>.
+        </p>
+      </div>
+      <div class="gallery" id="gallery"></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap">
+      <div>GREAT Greenland ROV · Aquarius Project</div>
+      <div><a href="https://github.com/LukeGrif/GREAT-Greenland-ROV" target="_blank" rel="noopener">View on GitHub</a></div>
+    </div>
+  </footer>
+
+  <script type="module" src="js/site.js"></script>
+</body>
+</html>

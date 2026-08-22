@@ -1,0 +1,17 @@
+{
+  "_comment": "Gallery images for the GREAT Greenland ROV site. To add a photo: commit the image file into this images/ folder, then add an entry to the list below. The gallery on the homepage renders these in order.",
+  "photos": [
+    {
+      "file": "placeholder-1.svg",
+      "caption": "Placeholder — replace with a survey photo (e.g. seamount flank)."
+    },
+    {
+      "file": "placeholder-2.svg",
+      "caption": "Placeholder — replace with a survey photo (e.g. ROV on deck)."
+    },
+    {
+      "file": "placeholder-3.svg",
+      "caption": "Placeholder — replace with a survey photo (e.g. volcanic outcrop / fauna)."
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GREAT Greenland ROV — CAD Viewer</title>
+
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Import map for Three.js -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js"
+    }
+  }
+  </script>
+</head>
+
+<body>
+  <!-- TOPBAR WITH LOGO -->
+  <div class="topbar">
+    <img src="cris.png" alt="Project Logo" />
+    <div class="topbar-title">GREAT Greenland ROV — CAD Viewer</div>
+  </div>
+
+  <!-- TOGGLE BUTTON FOR SIDEBAR -->
+  <button id="sidebarToggleBtn" aria-label="Toggle control panel" aria-expanded="true">
+    <span id="sidebarToggleIcon">☰</span>
+    <span class="label">Controls</span>
+  </button>
+
+  <!-- 3D Canvas -->
+  <div class="viewer-panel">
+    <canvas id="viewer-canvas"></canvas>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <h2 id="modelTitle">Model Viewer</h2>
+
+    <label>Status <span id="statusText">Idle</span></label>
+    <label id="errorText"></label>
+
+    <label>File <span id="fileName">None</span></label>
+    <label>Bounds <span id="boundsLabel">-</span></label>
+    <label>Triangles <span id="trianglesLabel">-</span></label>
+    <label>Polygons <span id="polyCount">-</span></label>
+    <label>Environment <span id="envLabel">Daylight</span></label>
+
+    <h3>Models</h3>
+    <div id="modelButtons" class="model-buttons"></div>
+
+    <h3>View</h3>
+    <button id="resetViewBtn">Reset View</button>
+    <button id="autoRotateBtn">Auto Rotate</button>
+    <button id="wireframeBtn">Wireframe</button>
+    <button id="bgToggleBtn">Toggle Background</button>
+
+    <label><input type="checkbox" id="gridToggle" /> Grid</label>
+    <label><input type="checkbox" id="shadowToggle" /> Shadows</label>
+
+    <h3>Load Local</h3>
+    <input type="file" id="fileInput" accept=".glb,.gltf" />
+  </div>
+
+  <!-- Main application module -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
