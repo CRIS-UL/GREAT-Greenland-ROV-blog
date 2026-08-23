@@ -11,12 +11,7 @@ import { SURVEY_LINES } from "./survey-data.js";
 --------------------------------------------------------------------------- */
 const NATIVE_MAX_ZOOM = 13; // last zoom the ocean basemap has real tiles for
 
-// Initial framing (east Greenland → Iceland → sites) …
-const REGION_FIT = [
-  [62.0, -40.0],
-  [73.8, -7.0]
-];
-// … and the hard pan limit — extended east and south so you can navigate to
+// The hard pan limit — extended east and south so you can navigate to
 // the top of Europe (British Isles, Scandinavia) without reaching the rest of
 // the world.
 const REGION_MAX_BOUNDS = [
@@ -121,9 +116,26 @@ function initMap() {
     { maxNativeZoom: NATIVE_MAX_ZOOM, maxZoom: 18 }
   ).addTo(map);
 
-  map.fitBounds(REGION_FIT);
-  // Lock zoom-out near the region framing (one extra level for context) so the
-  // map stays over the North Atlantic / Arctic Europe, not the whole world.
+  // Frame the initial view centred on all the survey points (with margin for
+  // context) so the sites sit in the middle rather than off to one side.
+  const pts = SURVEY_LINES.flatMap((l) => allPointsOf(l));
+  const lats = pts.map((p) => p.lat);
+  const lons = pts.map((p) => p.lon);
+  const minLat = Math.min(...lats);
+  const maxLat = Math.max(...lats);
+  const minLon = Math.min(...lons);
+  const maxLon = Math.max(...lons);
+  const padLat = (maxLat - minLat) * 1.6 + 0.8;
+  const padLon = (maxLon - minLon) * 1.6 + 1.2;
+  map.fitBounds(
+    [
+      [minLat - padLat, minLon - padLon],
+      [maxLat + padLat, maxLon + padLon]
+    ],
+    { maxZoom: 8, padding: [20, 20] }
+  );
+  // Lock zoom-out one level below the initial framing so the map stays over the
+  // North Atlantic / Arctic Europe, not the whole world.
   map.setMinZoom(Math.max(3, map.getZoom() - 1));
 
   buildOverview();
