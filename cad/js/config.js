@@ -1,6 +1,6 @@
 // cad/js/config.js
-// The ROV CAD model shown in the viewer.
-// To add more models, drop a .glb into cad/models/ and add an entry here.
-export const MODELS = [
-  { id: "rov", label: "Étaine", path: "models/DCG_PartA.glb" }
-];
+// No model is loaded by default — the viewer starts blank.
+// To add your ROV model: drop a .glb into cad/models/ and add an entry, e.g.
+//   { id: "rov", label: "Étaine", path: "models/YourModel.glb" }
+// (Or use the sidebar "Load Local" file picker to preview a .glb without editing this file.)
+export const MODELS = [];
