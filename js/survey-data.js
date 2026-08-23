@@ -109,6 +109,25 @@ export const SURVEY_LINES = [
     ]
   },
 
+  // ===================== ISOLATED SEAMOUNT (~72.39°N / 15.64°W) =============
+  {
+    id: "seamount",
+    bg: "images/sites/placeholder-seamount.svg",
+    name: "Isolated Seamount",
+    feature: "Seamount",
+    color: "#f5a623",
+    description:
+      "Isolated seamount, ~1100 m deep. Endpoint not recorded, and the 'Top' " +
+      "fix (72.382733°N) had its longitude cut off in the notes — add both here " +
+      "once confirmed.",
+    points: [
+      { lat: 72.394833, lon: -15.642150, label: "Start" },
+      { lat: 72.385317, lon: -15.634700, label: "Wall" }
+      // Top: lat 72.382733, lon cut off in the notes — add once confirmed.
+      // Endpoint: not recorded.
+    ]
+  },
+
   // ===================== FAULT LINE (west, ~71.00°N / 13.27°W) ==============
   {
     id: "fault-line",
