@@ -3,7 +3,9 @@
   "photos": [
     { "file": "01-control-cabin.jpg", "caption": "The team monitoring a dive from the ROV control cabin." },
     { "file": "02-live-feeds.jpg", "caption": "Live camera and sonar feeds from Étaine on the seabed — the green lasers give scale." },
-    { "file": "03-piloting.jpg", "caption": "At the controls, piloting Étaine during a dive." },
-    { "file": "04-samples-on-deck.jpg", "caption": "Recovered seafloor samples brought up on deck." }
+    { "file": "03-manipulators.jpg", "caption": "Operating the manipulators to collect a core sample." },
+    { "file": "04-flying-etaine.jpg", "caption": "Flying Étaine from the pilot's console." },
+    { "file": "05-control-container.jpg", "caption": "The team following the dive from the control container." },
+    { "file": "06-gathered-viewing.jpg", "caption": "Crew and scientists gathered around the screens during a dive." }
   ]
 }
