@@ -117,12 +117,14 @@ export const SURVEY_LINES = [
     feature: "Seamount",
     color: "#f5a623",
     description:
-      "Isolated seamount, ~1100 m deep. Endpoint was not recorded.",
+      "Isolated seamount rising from ~1157 m at its base to ~658 m at the " +
+      "summit. Endpoint was not recorded.",
     points: [
-      { lat: 72.394833, lon: -15.642150, label: "Start" },
+      { lat: 72.394833, lon: -15.642150, depth: 1157, label: "Start" },
       { lat: 72.385317, lon: -15.634700, label: "Wall" },
-      { lat: 72.382733, lon: -15.633633, label: "Top" }
-      // Endpoint: not recorded.
+      { lat: 72.382733, lon: -15.633633, depth: 658, label: "Top" }
+      // Deepest 1157 m at Start, shallowest 658 m at Top (summit); Wall depth
+      // not recorded. Endpoint: not recorded.
     ]
   },
 
