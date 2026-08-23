@@ -80,16 +80,30 @@ export const SURVEY_LINES = [
     color: "#2e86de",
     description:
       "Up-slope transect through a glacier-carved valley (~72.47°N / 13.8°W). " +
-      "Ordered deepest-hole → up the slope.",
+      "Boulder and End Slope were reference points, not on the travelled path.",
+    paths: [
+      {
+        label: "Path travelled",
+        color: "#22d3ee",
+        seq: [
+          "Deepest Hole",
+          "Start / ROV start",
+          "Start Slope",
+          "Middle Slope",
+          "Top Slope",
+          "ROV end"
+        ]
+      }
+    ],
     points: [
       { lat: 72.47080, lon: -13.80521, depth: 939, label: "Deepest Hole" },
       { lat: 72.47183, lon: -13.80571, depth: 900, label: "Start / ROV start" },
-      { lat: 72.47289, lon: -13.80570, depth: 852, label: "Boulder" },
+      { lat: 72.47289, lon: -13.80570, depth: 852, label: "Boulder", ref: true },
       { lat: 72.47384, lon: -13.81380, depth: 840, label: "Start Slope" },
       { lat: 72.47489, lon: -13.82100, depth: 759, label: "Middle Slope" },
       { lat: 72.47669, lon: -13.82944, depth: 615, label: "Top Slope" },
       { lat: 72.47712, lon: -13.83133, label: "ROV end" },
-      { lat: 72.47882, lon: -13.83272, depth: 593, label: "End Slope" }
+      { lat: 72.47882, lon: -13.83272, depth: 593, label: "End Slope", ref: true }
     ]
   },
   {
@@ -100,6 +114,13 @@ export const SURVEY_LINES = [
     color: "#6c5ce7",
     description:
       "Canyon (glacier-carved valley) dive, ~72.50°N / 14.1°W.",
+    paths: [
+      {
+        label: "Path travelled",
+        color: "#22d3ee",
+        seq: ["Start", "Mid Canyon", "Extra point", "Top Canyon", "End"]
+      }
+    ],
     points: [
       { lat: 72.50788, lon: -14.11005, depth: 857.2, label: "Start" },
       { lat: 72.50310, lon: -14.10173, depth: 644.5, label: "Mid Canyon" },
@@ -119,6 +140,13 @@ export const SURVEY_LINES = [
     description:
       "Isolated seamount rising from ~1157 m at its base to ~658 m at the " +
       "summit. Endpoint was not recorded.",
+    paths: [
+      {
+        label: "Path travelled",
+        color: "#22d3ee",
+        seq: ["Start", "Wall", "Top"]
+      }
+    ],
     points: [
       { lat: 72.394833, lon: -15.642150, depth: 1157, label: "Start" },
       { lat: 72.385317, lon: -15.634700, label: "Wall" },
@@ -136,6 +164,13 @@ export const SURVEY_LINES = [
     feature: "Fault line",
     color: "#16a085",
     description: "A fault line surveyed west of the caldera (~71.00°N / 13.27°W).",
+    paths: [
+      {
+        label: "Path travelled",
+        color: "#22d3ee",
+        seq: ["1 (Start)", "2", "3", "4", "5", "6"]
+      }
+    ],
     points: [
       { lat: 71.00393333, lon: -13.26673333, depth: 685, label: "1 (Start)" },
       { lat: 71.00463333, lon: -13.27271667, depth: 506, label: "2" },

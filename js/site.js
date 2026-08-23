@@ -173,13 +173,19 @@ function openSiteView(line) {
   currentSite = line;
   img.src = line.bg || "";
   img.alt = line.name + " bathymetry";
-  const legend = (line.paths && line.paths.length)
+  const legendItems = (line.paths || []).map((p) => ({
+    color: p.color || line.color,
+    label: p.label || ""
+  }));
+  if (allPointsOf(line).some((p) => p.ref)) {
+    legendItems.push({ color: "#b9c6d1", label: "Reference point" });
+  }
+  const legend = legendItems.length
     ? `<span class="sv-legend">` +
-      line.paths
+      legendItems
         .map(
-          (p) =>
-            `<span><i style="background:${p.color || line.color}"></i>` +
-            `${escapeHtml(p.label || "")}</span>`
+          (it) =>
+            `<span><i style="background:${it.color}"></i>${escapeHtml(it.label)}</span>`
         )
         .join("") +
       `</span>`
@@ -275,15 +281,18 @@ function renderSiteSvg(line, svg) {
     });
   }
 
-  // Fix markers + labels for every point.
+  // Fix markers + labels for every point. Reference points (not on the
+  // travelled path) render muted so they read as context, not route.
   all.forEach((p, i) => {
     const q = project(p);
     const name = p.label || "fix " + (i + 1);
     const depthTxt = p.depth ? ` · ${p.depth} m` : "";
+    const fill = p.ref ? "#b9c6d1" : line.color;
+    const r = p.ref ? 5.5 : 6.5;
     html +=
-      `<circle cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="6.5" ` +
-      `fill="${line.color}" stroke="#fff" stroke-width="2">` +
-      `<title>${escapeHtml(name)}${escapeHtml(depthTxt)} — ` +
+      `<circle cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="${r}" ` +
+      `fill="${fill}" stroke="#fff" stroke-width="2">` +
+      `<title>${escapeHtml(name)}${p.ref ? " (reference)" : ""}${escapeHtml(depthTxt)} — ` +
       `${p.lat.toFixed(5)}, ${p.lon.toFixed(5)}</title></circle>`;
     html +=
       `<text class="sv-label" x="${(q.x + 10).toFixed(1)}" ` +
