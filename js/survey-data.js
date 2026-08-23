@@ -107,5 +107,23 @@ export const SURVEY_LINES = [
       { lat: 72.49837, lon: -14.11115, depth: 432.6, label: "Top Canyon" },
       { lat: 72.49577, lon: -14.10692, depth: 453.9, label: "End" }
     ]
+  },
+
+  // ===================== FAULT LINE (west, ~71.00°N / 13.27°W) ==============
+  {
+    id: "fault-line",
+    bg: "images/sites/placeholder-fault-line.svg",
+    name: "Fault Line",
+    feature: "Fault line",
+    color: "#16a085",
+    description: "A fault line surveyed west of the caldera (~71.00°N / 13.27°W).",
+    points: [
+      { lat: 71.00393333, lon: -13.26673333, depth: 685, label: "1 (Start)" },
+      { lat: 71.00463333, lon: -13.27271667, depth: 506, label: "2" },
+      { lat: 71.00456667, lon: -13.27468333, depth: 520, label: "3" },
+      { lat: 71.00460000, lon: -13.27693333, depth: 485, label: "4" },
+      { lat: 71.00585000, lon: -13.28128333, depth: 401, label: "5" },
+      { lat: 71.00583333, lon: -13.28800000, depth: 413, label: "6" }
+    ]
   }
 ];
