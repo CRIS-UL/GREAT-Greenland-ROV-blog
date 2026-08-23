@@ -1,8 +1,9 @@
 {
   "_comment": "Gallery images for the GREAT Greenland ROV site. To add a photo: commit the image file into this images/ folder, then add an entry to the list below. The gallery on the homepage renders these in order.",
   "photos": [
-    { "file": "placeholder-1.svg", "caption": "Placeholder" },
-    { "file": "placeholder-2.svg", "caption": "Placeholder" },
-    { "file": "placeholder-3.svg", "caption": "Placeholder" }
+    { "file": "01-control-cabin.jpg", "caption": "The team monitoring a dive from the ROV control cabin." },
+    { "file": "02-live-feeds.jpg", "caption": "Live camera and sonar feeds from Étaine on the seabed — the green lasers give scale." },
+    { "file": "03-piloting.jpg", "caption": "At the controls, piloting Étaine during a dive." },
+    { "file": "04-samples-on-deck.jpg", "caption": "Recovered seafloor samples brought up on deck." }
   ]
 }
