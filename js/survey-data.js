@@ -117,13 +117,11 @@ export const SURVEY_LINES = [
     feature: "Seamount",
     color: "#f5a623",
     description:
-      "Isolated seamount, ~1100 m deep. Endpoint not recorded, and the 'Top' " +
-      "fix (72.382733°N) had its longitude cut off in the notes — add both here " +
-      "once confirmed.",
+      "Isolated seamount, ~1100 m deep. Endpoint was not recorded.",
     points: [
       { lat: 72.394833, lon: -15.642150, label: "Start" },
-      { lat: 72.385317, lon: -15.634700, label: "Wall" }
-      // Top: lat 72.382733, lon cut off in the notes — add once confirmed.
+      { lat: 72.385317, lon: -15.634700, label: "Wall" },
+      { lat: 72.382733, lon: -15.633633, label: "Top" }
       // Endpoint: not recorded.
     ]
   },
