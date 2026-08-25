@@ -310,3 +310,27 @@ figure.shot figcaption { padding: 10px 12px; font-size: 13px; color: var(--muted
   .footer-logo { margin: 0 auto 15px; }
   .footer-right h3 { margin-top: 10px; }
 }
+
+/* Music toggle button */
+#audio-toggle {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 1000;
+  width: 46px;
+  height: 46px;
+  border: none;
+  border-radius: 50%;
+  background: #0a2a43;
+  color: #fff;
+  font-size: 20px;
+  line-height: 46px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+#audio-toggle:hover {
+  transform: scale(1.08);
+  background: #0e3a5c;
+}

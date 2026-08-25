@@ -74,7 +74,7 @@ export const SURVEY_LINES = [
   // ===================== GLACIAL VALLEYS (north, ~72.5°N) ===================
   {
     id: "valley-slope",
-    bg: "images/sites/placeholder-valley-slope.svg",
+    bg: "images/sites/valley-slope.jpg",
     name: "Glacial Valley — Slope Dive",
     feature: "Glacial valley",
     color: "#2e86de",
@@ -108,7 +108,7 @@ export const SURVEY_LINES = [
   },
   {
     id: "valley-canyon",
-    bg: "images/sites/placeholder-valley-canyon.svg",
+    bg: "images/sites/valley-canyon.jpg",
     name: "Glacial Valley — Canyon Dive",
     feature: "Glacial valley",
     color: "#6c5ce7",
@@ -133,7 +133,7 @@ export const SURVEY_LINES = [
   // ===================== ISOLATED SEAMOUNT (~72.39°N / 15.64°W) =============
   {
     id: "seamount",
-    bg: "images/sites/placeholder-seamount.svg",
+    bg: "images/sites/seamount.jpg",
     name: "Isolated Seamount",
     feature: "Seamount",
     color: "#f5a623",
@@ -159,7 +159,7 @@ export const SURVEY_LINES = [
   // ===================== FAULT LINE (west, ~71.00°N / 13.27°W) ==============
   {
     id: "fault-line",
-    bg: "images/sites/placeholder-fault-line.svg",
+    bg: "images/sites/fault-line.jpg",
     name: "Fault Line",
     feature: "Fault line",
     color: "#16a085",

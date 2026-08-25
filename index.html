@@ -170,6 +170,42 @@
     </div>
   </footer>
 
+  <!-- Background music -->
+  <audio id="site-audio" src="assets/wings.mp3" loop preload="auto"></audio>
+  <button id="audio-toggle" type="button" aria-label="Toggle music"
+          title="Play / pause music">🔇</button>
+
+  <script>
+    (function () {
+      var audio = document.getElementById("site-audio");
+      var btn   = document.getElementById("audio-toggle");
+      audio.volume = 0.5;              // 0.0-1.0, tweak to taste
+
+      function sync() { btn.textContent = audio.paused ? "🔇" : "🔊"; }
+
+      function start() {
+        audio.play().then(sync).catch(function () { /* blocked, wait for tap */ });
+      }
+
+      start();
+      ["click", "keydown", "touchstart", "scroll"].forEach(function (evt) {
+        window.addEventListener(evt, function once() {
+          if (audio.paused) start();
+          ["click", "keydown", "touchstart", "scroll"].forEach(function (e) {
+            window.removeEventListener(e, once);
+          });
+        }, { once: true, passive: true });
+      });
+
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (audio.paused) audio.play().then(sync); else { audio.pause(); sync(); }
+      });
+
+      audio.addEventListener("play", sync);
+      audio.addEventListener("pause", sync);
+    })();
+  </script>
   <script type="module" src="js/site.js"></script>
 </body>
 </html>
