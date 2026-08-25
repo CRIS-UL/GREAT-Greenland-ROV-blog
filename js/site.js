@@ -255,10 +255,9 @@ function renderSiteSvg(line, svg) {
   const all = segs.flatMap((s) => s.points);
   const project = makeProjector(all, W, H, 64);
 
-  // Merged sites (several dives) get dense clusters, so keep their on-image
-  // labels short — depth stays on hover and in the side panel. Single-track
-  // sites show depth inline.
-  const showDepthInline = segs.length === 1;
+  const byLabel = new Map(all.map((p) => [p.label, p]));
+  const seqPoints = (path) =>
+    (path.seq || []).map((lbl) => byLabel.get(lbl)).filter(Boolean);
 
   let html = "";
 
@@ -277,28 +276,46 @@ function renderSiteSvg(line, svg) {
     );
   };
 
+  // Draw the path lines.
   if (line.paths && line.paths.length) {
-    // Custom connections defined by point label.
-    const byLabel = new Map(all.map((p) => [p.label, p]));
     line.paths.forEach((path) => {
-      const pts = (path.seq || [])
-        .map((lbl) => byLabel.get(lbl))
-        .filter(Boolean);
+      const pts = seqPoints(path);
       if (pts.length > 1) html += polyLine(pts, path.color || line.color);
     });
   } else {
-    // Default: one polyline per segment (dives are not joined to each other).
     segs.forEach((seg) => {
       if (seg.points.length > 1) html += polyLine(seg.points, line.color);
     });
   }
 
-  // Fix markers + labels for every point. Reference points (not on the
-  // travelled path) render muted so they read as context, not route.
+  // Distance (m) between consecutive waypoints, labelled at each segment
+  // midpoint along the travelled path (or the single track).
+  const travelled = line.paths
+    ? line.paths.find((p) => /travel/i.test(p.label || "")) || line.paths[0]
+    : null;
+  const routePts = travelled
+    ? seqPoints(travelled)
+    : segs[0]
+    ? segs[0].points
+    : [];
+  for (let i = 0; i < routePts.length - 1; i++) {
+    const a = routePts[i];
+    const b = routePts[i + 1];
+    const m = Math.round(haversineKm([a.lat, a.lon], [b.lat, b.lon]) * 1000);
+    const qa = project(a);
+    const qb = project(b);
+    html +=
+      `<text class="sv-dist" text-anchor="middle" x="${((qa.x + qb.x) / 2).toFixed(1)}" ` +
+      `y="${((qa.y + qb.y) / 2 - 6).toFixed(1)}">${m} m</text>`;
+  }
+
+  // Fix markers + labels for every point, with depth beside each. Reference
+  // points (not on the travelled path) render muted so they read as context.
   all.forEach((p, i) => {
     const q = project(p);
     const name = p.label || "fix " + (i + 1);
-    const depthTxt = p.depth ? ` · ${p.depth} m` : "";
+    const depthTxt =
+      p.depth || p.depth === 0 ? ` · ${p.depth} m` : "";
     const fill = p.ref ? "#b9c6d1" : line.color;
     const r = p.ref ? 5.5 : 6.5;
     html +=
@@ -309,10 +326,7 @@ function renderSiteSvg(line, svg) {
     html +=
       `<text class="sv-label" x="${(q.x + 10).toFixed(1)}" ` +
       `y="${(q.y + 4).toFixed(1)}">${escapeHtml(name)}` +
-      (showDepthInline
-        ? `<tspan class="sv-depth">${escapeHtml(depthTxt)}</tspan>`
-        : "") +
-      `</text>`;
+      `<tspan class="sv-depth">${escapeHtml(depthTxt)}</tspan></text>`;
   });
 
   svg.innerHTML = html;

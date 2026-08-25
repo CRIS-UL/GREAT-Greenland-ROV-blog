@@ -1,17 +1,20 @@
 # GREAT Greenland ROV — Aquarius Project
 
-A GitHub Pages site for the GREAT Greenland ROV mission, part of the **Aquarius
-Project**, surveying submarine **seamounts** and **underwater volcanoes** off
-Greenland.
+Survey site for the **GREAT Greenland ROV** mission, part of the **Aquarius
+Project**. Using the ROV **Étaín**, the team surveyed the seafloor off
+north-east Greenland (~71–72.5°N): an underwater **volcano** (the Caldera), an
+isolated **seamount**, two glacier-carved **valleys**, and a **fault line** —
+logging position and depth along each dive and capturing imagery of the seabed.
 
 **Live site:** https://lukegrif.github.io/GREAT-Greenland-ROV/
 
 ## What's on the page
 
-- **Description** of the mission and the Aquarius Project.
-- **Survey map** — an interactive Leaflet map of the ROV dive transects and
-  position fixes (with depth).
-- **ROV CAD model** — an interactive Three.js 3D viewer (embedded from `cad/`).
+- **Overview** of the mission, the Aquarius Project, and Étaín's instruments.
+- **Survey map** — an interactive Leaflet map. Click a site to see its dive
+  track over the multibeam bathymetry, with per-fix depths and the distance
+  between waypoints.
+- **ROV 3D model** — an interactive Three.js viewer (embedded from `cad/`).
 - **Photo gallery** — imagery from the dives.
 
 The look and feel (blue `#0083c1`, white logo bar, blue nav/footer) matches the
