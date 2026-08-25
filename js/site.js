@@ -11,7 +11,7 @@ import { SURVEY_LINES } from "./survey-data.js";
 --------------------------------------------------------------------------- */
 const NATIVE_MAX_ZOOM = 13; // last zoom the ocean basemap has real tiles for
 
-// The hard pan limit — extended east and south so you can navigate to
+// The hard pan limit, extended east and south so you can navigate to
 // the top of Europe (British Isles, Scandinavia) without reaching the rest of
 // the world.
 const REGION_MAX_BOUNDS = [
@@ -107,7 +107,7 @@ function initMap() {
       maxNativeZoom: NATIVE_MAX_ZOOM,
       maxZoom: 18,
       attribution:
-        "Tiles © Esri — GEBCO, NOAA, National Geographic, Garmin and others"
+        "Tiles © Esri · GEBCO, NOAA, National Geographic, Garmin and others"
     }
   ).addTo(map);
 
@@ -165,7 +165,7 @@ function buildOverview() {
     });
     const marker = L.marker(c, { icon }).addTo(map);
     marker.on("click", () => openSiteView(line));
-    marker.bindTooltip(`${line.feature || "Dive"} — open dive`, {
+    marker.bindTooltip(`${line.feature || "Dive"} · open dive`, {
       direction: "top"
     });
     overviewMarkers.push(marker);
@@ -321,7 +321,7 @@ function renderSiteSvg(line, svg) {
     html +=
       `<circle cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="${r}" ` +
       `fill="${fill}" stroke="#fff" stroke-width="2">` +
-      `<title>${escapeHtml(name)}${p.ref ? " (reference)" : ""}${escapeHtml(depthTxt)} — ` +
+      `<title>${escapeHtml(name)}${p.ref ? " (reference)" : ""}${escapeHtml(depthTxt)} · ` +
       `${p.lat.toFixed(5)}, ${p.lon.toFixed(5)}</title></circle>`;
     html +=
       `<text class="sv-label" x="${(q.x + 10).toFixed(1)}" ` +
@@ -387,7 +387,7 @@ function buildSidePanel() {
   );
   list.innerHTML =
     rows.join("") ||
-    `<li><span style="color:var(--muted)">No fixes digitised yet — add them in js/survey-data.js</span></li>`;
+    `<li><span style="color:var(--muted)">No fixes digitised yet, add them in js/survey-data.js</span></li>`;
 }
 
 function avg(arr) {
@@ -436,7 +436,7 @@ function escapeHtml(s) {
 }
 
 /* ---------------------------------------------------------------------------
-   NAV — active link on scroll
+   NAV: active link on scroll
 --------------------------------------------------------------------------- */
 function initNavSpy() {
   const links = Array.from(document.querySelectorAll(".nav-item"));
