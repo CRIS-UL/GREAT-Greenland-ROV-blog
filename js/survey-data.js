@@ -14,14 +14,14 @@
 //
 // A site normally has a `points` array (one track). A site can instead have
 // `segments` (an array of { label, points }) to hold several dives under one
-// marker — each segment's track is drawn separately. The Caldera uses this.
+// marker; each segment's track is drawn separately. The Caldera uses this.
 //
 // TO ADD / EDIT: add a point to a `points` array, add a segment, or add a new
 // site object. The map, legend, stats and fix list all update automatically.
 // ---------------------------------------------------------------------------
 
 export const SURVEY_LINES = [
-  // ===================== VOLCANO — the Caldera (~71.02°N / 13.17°W) =========
+  // ===================== VOLCANO: the Caldera (~71.02°N / 13.17°W) =========
   // All three caldera dives are merged into one site. Each dive is a
   // `segment` so its track is drawn separately (no line joining the dives).
   {
@@ -74,12 +74,12 @@ export const SURVEY_LINES = [
   // ===================== DROWNED VALLEYS (north, ~72.5°N) ===================
   // Once read as glacier-carved, these valleys are now interpreted as a
   // wave-planed surface incised by subaerial gullies that were reopened and
-  // deepened by submarine slope failures after the surface drowned — no ice
+  // deepened by submarine slope failures after the surface drowned, no ice
   // cap required (see the overview note).
   {
     id: "valley-slope",
     bg: "images/sites/valley-slope.jpg",
-    name: "Drowned Valley — Slope Dive",
+    name: "Drowned Valley: Slope Dive",
     feature: "Valley",
     color: "#2e86de",
     description:
@@ -115,11 +115,11 @@ export const SURVEY_LINES = [
   {
     id: "valley-canyon",
     bg: "images/sites/valley-canyon.jpg",
-    name: "Drowned Valley — Canyon Dive",
+    name: "Drowned Valley: Canyon Dive",
     feature: "Valley",
     color: "#6c5ce7",
     description:
-      "Canyon dive through a drowned valley, ~72.50°N / 14.1°W — interpreted " +
+      "Canyon dive through a drowned valley, ~72.50°N / 14.1°W, interpreted " +
       "as a retrogressive submarine canyon rather than a glacier-carved one.",
     paths: [
       {

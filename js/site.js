@@ -368,10 +368,10 @@ function buildSidePanel() {
   document.getElementById("stat-lines").textContent = linesWithPoints().length;
   document.getElementById("stat-deep").textContent = depths.length
     ? Math.max(...depths) + " m"
-    : "—";
+    : "-";
   document.getElementById("stat-shallow").textContent = depths.length
     ? Math.min(...depths) + " m"
-    : "—";
+    : "-";
 
   const list = document.getElementById("pt-list");
   const rows = SURVEY_LINES.flatMap((l) =>
