@@ -1,14 +1,14 @@
 # GREAT Greenland ROV (Aquarius Project)
 
 A short blog from the GREAT Greenland ROV mission, part of the
-[Aquarius Project](https://aquarius-ri.eu). Using the ROV Étaín, the team
+[Aquarius Project](https://aquarius-ri.eu/transnational-access-projects/great/). Using the ROV Étaín, the team
 surveyed the seafloor off north-east Greenland: an underwater volcano, an
 isolated seamount, two drowned valleys, and a fault line. Each site was mapped
 and photographed along the way.
 
 The mission was run in partnership with scientists from the
 Greenland Institute of Natural Resources, with
-chief scientist Diana Krawczyk, and sea operations supported from the
+chief scientist [Diana Krawczyk](https://www.linkedin.com/in/diana-krawczyk-325271259/), and sea operations supported from the
 [Marine Institute](https://www.marine.ie) research vessel, the
 RV Celtic Explorer.
 
