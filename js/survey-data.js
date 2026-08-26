@@ -10,7 +10,7 @@
 // optional (omit it where it wasn't recorded).
 //
 // `feature` labels what the dive was surveying:
-//   "Volcano" (the Caldera) or "Glacial valley".
+//   "Volcano" (the Caldera) or "Valley".
 //
 // A site normally has a `points` array (one track). A site can instead have
 // `segments` (an array of { label, points }) to hold several dives under one
@@ -71,16 +71,22 @@ export const SURVEY_LINES = [
     ]
   },
 
-  // ===================== GLACIAL VALLEYS (north, ~72.5°N) ===================
+  // ===================== DROWNED VALLEYS (north, ~72.5°N) ===================
+  // Once read as glacier-carved, these valleys are now interpreted as a
+  // wave-planed surface incised by subaerial gullies that were reopened and
+  // deepened by submarine slope failures after the surface drowned — no ice
+  // cap required (see the overview note).
   {
     id: "valley-slope",
     bg: "images/sites/valley-slope.jpg",
-    name: "Glacial Valley — Slope Dive",
-    feature: "Glacial valley",
+    name: "Drowned Valley — Slope Dive",
+    feature: "Valley",
     color: "#2e86de",
     description:
-      "Up-slope transect through a glacier-carved valley (~72.47°N / 13.8°W). " +
-      "Boulder and End Slope were reference points, not on the travelled path.",
+      "Up-slope transect through a drowned valley (~72.47°N / 13.8°W). Rather " +
+      "than glacier-carved, the valley reads as a subaerial gully later " +
+      "reopened by submarine slope failure after the surface drowned. Boulder " +
+      "and End Slope were reference points, not on the travelled path.",
     paths: [
       {
         label: "Path travelled",
@@ -109,11 +115,12 @@ export const SURVEY_LINES = [
   {
     id: "valley-canyon",
     bg: "images/sites/valley-canyon.jpg",
-    name: "Glacial Valley — Canyon Dive",
-    feature: "Glacial valley",
+    name: "Drowned Valley — Canyon Dive",
+    feature: "Valley",
     color: "#6c5ce7",
     description:
-      "Canyon (glacier-carved valley) dive, ~72.50°N / 14.1°W.",
+      "Canyon dive through a drowned valley, ~72.50°N / 14.1°W — interpreted " +
+      "as a retrogressive submarine canyon rather than a glacier-carved one.",
     paths: [
       {
         label: "Path travelled",
