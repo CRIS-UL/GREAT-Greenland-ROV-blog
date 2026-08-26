@@ -7,8 +7,8 @@ isolated seamount, two drowned valleys, and a fault line. Each site was mapped
 and photographed along the way.
 
 The mission was run in partnership with scientists from the
-[Greenland Institute of Natural Resources](https://natur.gl/?lang=en), survey
-work led by Diana Krawczyk, with sea operations supported from the
+[Greenland Institute of Natural Resources](https://natur.gl/?lang=en), with
+chief scientist Diana Krawczyk, and sea operations supported from the
 [Marine Institute (Ireland)](https://www.marine.ie) research vessel, the
 RV Celtic Explorer.
 
