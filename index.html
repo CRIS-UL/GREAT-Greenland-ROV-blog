@@ -202,19 +202,9 @@
 
       function sync() { btn.textContent = audio.paused ? "🔇" : "🔊"; }
 
-      function start() {
-        audio.play().then(sync).catch(function () { /* blocked, wait for tap */ });
-      }
-
-      start();
-      ["click", "keydown", "touchstart", "scroll"].forEach(function (evt) {
-        window.addEventListener(evt, function once() {
-          if (audio.paused) start();
-          ["click", "keydown", "touchstart", "scroll"].forEach(function (e) {
-            window.removeEventListener(e, once);
-          });
-        }, { once: true, passive: true });
-      });
+      // Music is off by default. It only plays when the visitor clicks the
+      // toggle button below.
+      sync();
 
       btn.addEventListener("click", function (e) {
         e.stopPropagation();
