@@ -274,13 +274,12 @@ a.badge:hover { box-shadow: 0 2px 10px rgba(0,0,0,.14); }
 .leaflet-popup-content b { color: var(--brand); }
 
 /* ---------- CAD ---------- */
-.cad-frame {
-  width: 100%; height: 620px;
+.video-frame {
+  width: 100%;
   border: 1px solid var(--border); border-radius: 6px;
-  box-shadow: var(--shadow-md); overflow: hidden; background: #eef2f5;
+  box-shadow: var(--shadow-md); overflow: hidden; background: #000;
 }
-.cad-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
-.cad-note { margin-top: 12px; color: var(--muted); font-size: 14px; }
+.video-frame video { width: 100%; max-height: 620px; display: block; background: #000; }
 
 /* ---------- GALLERY ---------- */
 .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }

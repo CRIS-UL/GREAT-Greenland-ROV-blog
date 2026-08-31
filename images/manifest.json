@@ -13,6 +13,11 @@
     { "file": "10-seabed-life.jpg", "caption": "A rich seabed of sponges, cup corals and anemones, captured from Étaín's camera at 855 m depth." },
     { "file": "11-multibeam-screen.jpg", "caption": "Multibeam sonar and the HD14K camera feed on the control-room screen during a dive." },
     { "file": "12-multibeam-control.jpg", "caption": "Crew watching the multibeam sonar and live camera feeds from the control container." },
-    { "file": "13-multibeam-map.jpg", "caption": "Multibeam bathymetry of the Greenland Spreading Zone, showing the spreading directions and Louise's Fault." }
+    { "file": "13-multibeam-map.jpg", "caption": "Multibeam bathymetry of the Greenland Spreading Zone, showing the spreading directions and Louise's Fault." },
+    { "file": "sites/caldera.jpg", "caption": "Bathymetry of the Caldera, the underwater volcano surveyed on the mission." },
+    { "file": "sites/seamount.jpg", "caption": "Bathymetry of the isolated seamount, rising from ~1157 m at its base to ~658 m at its summit." },
+    { "file": "sites/valley-slope.jpg", "caption": "Bathymetry of the drowned valley — the up-slope transect dive." },
+    { "file": "sites/valley-canyon.jpg", "caption": "Bathymetry of the drowned valley — the canyon dive." },
+    { "file": "sites/fault-line.jpg", "caption": "Bathymetry of the fault line surveyed west of the Caldera." }
   ]
 }

@@ -36,7 +36,7 @@
   <nav class="navbar">
     <a href="#about" class="nav-item active">Overview</a>
     <a href="#map-section" class="nav-item">Survey Map</a>
-    <a href="#cad" class="nav-item">ROV Model</a>
+    <a href="#rov-video" class="nav-item">ROV Video</a>
     <a href="#photos" class="nav-item">Gallery</a>
   </nav>
 
@@ -131,24 +131,21 @@
       </div>
     </section>
 
-    <!-- CAD -->
-    <section class="section" id="cad">
+    <!-- ROV VIDEO -->
+    <section class="section" id="rov-video">
       <div class="section-head">
         <div class="kicker">The vehicle</div>
-        <h2>ROV CAD Model</h2>
+        <h2>ROV Étaín</h2>
         <p>
-          Interactive 3D model of <b>Étaín</b>, the ROV used on the mission.
-          Drag to orbit, scroll to zoom, and use the control panel to reset the
-          view, auto-rotate or toggle wireframe.
+          A 360° view of <b>Étaín</b>, the ROV used on the mission.
         </p>
       </div>
-      <div class="cad-frame">
-        <iframe src="cad/index.html" title="ROV CAD viewer" loading="lazy"></iframe>
+      <div class="video-frame">
+        <video src="assets/rov-rotating.mp4" controls playsinline preload="metadata">
+          Your browser doesn't support embedded video.
+          <a href="assets/rov-rotating.mp4">Download the video</a>.
+        </video>
       </div>
-      <p class="cad-note">
-        Model rendered with Three.js.
-        <a href="cad/index.html" target="_blank" rel="noopener">Open the viewer in full screen ↗</a>
-      </p>
     </section>
 
     <!-- GALLERY -->
@@ -182,7 +179,7 @@
         <a href="https://aquarius-ri.eu/transnational-access-projects/great/" class="footer-link" target="_blank" rel="noopener">GREAT project (Aquarius) →</a><br />
         <a href="https://www.marine.ie" class="footer-link" target="_blank" rel="noopener">Marine Institute · RV Celtic Explorer →</a><br />
         <a href="#map-section" class="footer-link">Survey Map →</a><br />
-        <a href="#cad" class="footer-link">ROV Model →</a><br />
+        <a href="#rov-video" class="footer-link">ROV Video →</a><br />
         <a href="#photos" class="footer-link">Gallery →</a><br />
         <a href="https://github.com/LukeGrif/GREAT-Greenland-ROV" class="footer-link" target="_blank" rel="noopener">View on GitHub →</a>
       </div>
