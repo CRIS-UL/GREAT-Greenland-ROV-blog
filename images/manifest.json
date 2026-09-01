@@ -1,6 +1,9 @@
 {
   "_comment": "Gallery images for the GREAT Greenland ROV site. To add a photo: commit the image file into this images/ folder, then add an entry to the list below. The gallery on the homepage renders these in order.",
   "photos": [
+    { "file": "rov-winching-first-dive.jpg", "caption": "Operator winching the ROV down for the first dive." },
+    { "file": "rov-iceland-before-departure.jpg", "caption": "The ROV aboard the RV Celtic Explorer in Iceland before departure." },
+    { "file": "rov-transport-limerick.jpg", "caption": "The ROV being loaded for transport from Limerick at the start of operations." },
     { "file": "01-control-cabin.jpg", "caption": "The team monitoring a dive from the ROV control cabin." },
     { "file": "02-live-feeds.jpg", "caption": "Live camera and sonar feeds from Étaín on the seabed. The green lasers give scale." },
     { "file": "03-manipulators.jpg", "caption": "Operating the manipulators to collect a core sample." },
